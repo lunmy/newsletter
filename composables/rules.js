@@ -1,7 +1,7 @@
 export function loginRule(value) {
   value = value.replaceAll("/", "");
   value = value.trim();
-  return value.length > 3 || "doit contenir au moins 3 caractères";
+  return value.length > 0 || "doit contenir au moins 3 caractères";
 }
 
 export function passwordRule(value) {

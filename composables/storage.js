@@ -1,6 +1,9 @@
 export function getStorage(key) {
-  let storedValue = localStorage.getItem(key);
-  return storedValue;
+  if (localStorage.getItem(key)) {
+    let storedValue = localStorage.getItem(key);
+    return storedValue;
+  }
+  return null;
 }
 
 export function setStorage(key, value) {

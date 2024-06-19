@@ -1,4 +1,3 @@
-import authOfetch from "@/plugins/authOfetch";
 import { ofetch } from "ofetch";
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
@@ -10,9 +9,22 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
   });
 
+  const authOfetch = {
+    async checkAuth(username, password, app) {
+      return await instance("/auth", {
+        method: "POST",
+        body: {
+          username,
+          password,
+          app,
+        },
+      });
+    },
+  };
+
   return {
     provide: {
-      authApi: authOfetch({ ofetch: instance }),
+      authApi: authOfetch,
     },
   };
 });

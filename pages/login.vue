@@ -29,7 +29,8 @@
         v-model="login"
         label="Login"
         :rules="[loginRule]"
-        variant="solo-filled"
+        variant="solo"
+        rounded="lg"
         required
       ></v-text-field>
       <v-text-field
@@ -37,48 +38,80 @@
         v-model="password"
         label="Password"
         :rules="[passwordRule]"
-        variant="solo-filled"
+        variant="solo"
+        rounded="lg"
         required
       ></v-text-field>
       <v-btn
-        class="mt-2"
+        class="mt-2 bg-secondary"
         type="button"
         block
         @click="checkInput()"
+        rounded="lg"
         :loading="isloading"
-        ><span class="text-primary-0"> Connect </span></v-btn
+        ><span class="text-0 font-semibold text-base"> Connect </span></v-btn
       >
     </v-form>
   </v-sheet>
 </template>
 <script setup>
+// without can't see console log from middleware
+definePageMeta({
+  middleware: ["auth"],
+});
 import { setStorage, getStorage } from "@/composables/storage";
 import { loginRule, passwordRule } from "@/composables/rules";
+import jwtDecode from "jwt-decode";
+
+import { storeToRefs } from "pinia"; // import storeToRefs helper hook from pinia
+import { useAuthStore } from "~/store/auth";
 
 const { $authApi } = useNuxtApp();
-const loginForm = ref(null);
 const router = useRouter();
+const loginForm = ref(null);
 const isloading = ref(false);
+
+const { setToken, setUser } = useAuthStore();
 
 // const login = ref("");
 // const password = ref("");
+const tokenApp = useRuntimeConfig().public.NUXT_ENV_APP_TOKEN;
 
 // todo testing value to remove
 const login = ref("jfichet");
 const password = ref("kWsm5tdZ0T9H!");
 
-const tokenApp = useRuntimeConfig().public.NUXT_ENV_APP_TOKEN;
-
 async function checkInput() {
+  // validate :rules
   const promise = loginForm.value.validate();
   promise.then((success) => {
     if (success.valid) {
       isloading.value = true;
-      $authApi.checkAuth(login.value, password.value, tokenApp).then((data) => {
-        setStorage("login", login.value);
-        setStorage("token", data["token"]);
-        navigateTo(`/home`);
-      });
+      // check API for validation
+      $authApi
+        .checkAuth(login.value, password.value, tokenApp)
+        .then((data) => {
+          // add login: login.valu to localStorage
+          setStorage("login", login.value);
+
+          // decode the responsed token
+          const user = jwtDecode(data.token);
+          setUser(user);
+          navigateTo(`/home`);
+        })
+        .catch((error) => {
+          const status = error.response.status;
+          switch (status) {
+            case 404:
+              _errorMessage.value = "Email ou mot de passe incorrect";
+              break;
+            default:
+              _errorMessage.value = "Une erreur est survenue";
+          }
+        })
+        .finally(() => {
+          isloading.value = false;
+        });
     }
   });
 }
