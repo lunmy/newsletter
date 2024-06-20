@@ -94,7 +94,7 @@ async function checkInput() {
           const status = error.response.status;
           switch (status) {
             case 404:
-              errorMsg.value = "Email ou mot de passe incorrect";
+              errorMsg.value = `erreur lors de la connection, verifier vos information`;
               break;
             default:
               errorMsg.value = "Une erreur est survenue";
