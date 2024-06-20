@@ -1,8 +1,13 @@
 <template>
-  <div>
-    <h1 class="text-3xl text-primary-0">Bienvenue {{ logintxt }}</h1>
+  <div class="bg-slate-700 d-flex">
+    <img src="@/public/imgTest/logo.svg" alt="" />
+
+    <span class="d-flex align-center mx-auto">
+      <p class="text-white">Marques</p>
+      <p class="m-4 text-white">/</p>
+      <p class="text-white">NewsLetters</p>
+    </span>
   </div>
-  <NuxtLink to="/login">login</NuxtLink>
 </template>
 
 <script setup>

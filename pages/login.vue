@@ -1,5 +1,9 @@
 <template>
-  <v-sheet class="mt-52 mx-auto" width="600">
+  <v-sheet
+    class="mt-52 mx-auto p-10 border-primary-0 border-sm rounded-lg"
+    elevation="2"
+    width="600"
+  >
     <span>
       <div class="d-flex justify-center m-16">
         <svg class="h-11 w-56">
