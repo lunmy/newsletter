@@ -2,6 +2,7 @@
   <div>
     <h1 class="text-3xl text-primary-0">Bienvenue {{ logintxt }}</h1>
   </div>
+  <a href="/login">login</a>
 </template>
 
 <script setup>

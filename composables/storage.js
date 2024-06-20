@@ -2,6 +2,8 @@ export function getStorage(key) {
   if (process.client) {
     if (localStorage.getItem(key)) {
       return localStorage.getItem(key);
+    } else {
+      return false;
     }
   }
   return null;

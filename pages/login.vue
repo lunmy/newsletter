@@ -51,33 +51,33 @@
         :loading="isloading"
         ><span class="text-0 font-semibold text-base"> Connect </span></v-btn
       >
+      <v-btn @click="goHome()"> home </v-btn>
     </v-form>
   </v-sheet>
 </template>
 <script setup>
-// without can't see console log from middleware
-
 import { setStorage, getStorage } from "@/composables/storage";
 import { loginRule, passwordRule } from "@/composables/rules";
-import jwtDecode from "jwt-decode";
-
-import { storeToRefs } from "pinia"; // import storeToRefs helper hook from pinia
-import { useAuthStore } from "~/store/auth";
 
 const { $authApi } = useNuxtApp();
 const router = useRouter();
 const loginForm = ref(null);
 const isloading = ref(false);
 
-const { setToken, setUser } = useAuthStore();
+const errorMsg = ref("");
 
 // const login = ref("");
 // const password = ref("");
 const tokenApp = useRuntimeConfig().public.NUXT_ENV_APP_TOKEN;
 
-// todo testing value to remove
+// fixme testing value to remove
 const login = ref("jfichet");
 const password = ref("kWsm5tdZ0T9H!");
+
+// fixme testing function to redirect without being logged
+function goHome() {
+  navigateTo("/home");
+}
 
 async function checkInput() {
   // validate :rules
@@ -89,22 +89,20 @@ async function checkInput() {
       $authApi
         .checkAuth(login.value, password.value, tokenApp)
         .then((data) => {
-          // add login: login.valu to localStorage
+          // add login & token in localStorage
+          setStorage("login", login.value);
           setStorage("token", data.token);
 
-          // decode the responsed token
-          const user = jwtDecode(data.token);
-          setUser(user);
           navigateTo(`/home`);
         })
         .catch((error) => {
           const status = error.response.status;
           switch (status) {
             case 404:
-              _errorMessage.value = "Email ou mot de passe incorrect";
+              errorMsg.value = "Email ou mot de passe incorrect";
               break;
             default:
-              _errorMessage.value = "Une erreur est survenue";
+              errorMsg.value = "Une erreur est survenue";
           }
         })
         .finally(() => {
