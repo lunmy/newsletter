@@ -7,10 +7,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
   const { user } = storeToRefs(useAuthStore());
   const router = useRouter();
 
-  if (process.client) {
+  if (import.meta.client) {
     if (!getStorage("token")) {
-      console.log("NO TOKEN");
-      navigateTo("/login");
+      return navigateTo("/login");
     } else {
       // check expiration date of the token
       const token = getStorage("token");
@@ -19,10 +18,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
       // convert expiration date in milisecond
       const expirationDate = new Date(limitDate * 1000);
       if (expirationDate < new Date()) {
-        navigateTo("/login");
+        return navigateTo("/login");
       }
     }
   }
 
-  // navigateTo(to.fullPath);
+  return;
 });
