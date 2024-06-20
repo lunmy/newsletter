@@ -8,7 +8,9 @@
 import { getStorage } from "@/composables/storage";
 
 const router = useRouter();
-
+definePageMeta({
+  middleware: ["auth"],
+});
 const logintxt = ref("");
 logintxt.value = getStorage("login");
 </script>

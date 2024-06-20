@@ -56,9 +56,7 @@
 </template>
 <script setup>
 // without can't see console log from middleware
-definePageMeta({
-  middleware: ["auth"],
-});
+
 import { setStorage, getStorage } from "@/composables/storage";
 import { loginRule, passwordRule } from "@/composables/rules";
 import jwtDecode from "jwt-decode";
@@ -92,7 +90,7 @@ async function checkInput() {
         .checkAuth(login.value, password.value, tokenApp)
         .then((data) => {
           // add login: login.valu to localStorage
-          setStorage("login", login.value);
+          setStorage("token", data.token);
 
           // decode the responsed token
           const user = jwtDecode(data.token);
