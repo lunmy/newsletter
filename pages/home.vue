@@ -8,14 +8,15 @@
       <p class="text-white">NewsLetters</p>
     </span>
   </div>
-  <div class="container">
-    <Ubutton _label="modifier" _bgColor="bg-slate-400" />
-    <!-- _bgHover="bg-slate-800" -->
+  <div class="container p-10 d-flex justify-evenly">
+    <brandCard />
+    <brandCard />
+    <brandCard />
   </div>
 </template>
 
 <script setup>
-import Ubutton from "~/components/U-nuxtLinkBtn.vue";
+import brandCard from "~/components/C-BrandCard.vue";
 
 definePageMeta({
   middleware: ["auth"],
