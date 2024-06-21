@@ -8,15 +8,16 @@
       <p class="text-white">NewsLetters</p>
     </span>
   </div>
+  <div class="container">
+    <Ubutton _label="modifier" _bgColor="bg-slate-400" />
+    <!-- _bgHover="bg-slate-800" -->
+  </div>
 </template>
 
 <script setup>
-import { getStorage } from "@/composables/storage";
+import Ubutton from "~/components/U-nuxtLinkBtn.vue";
 
-const router = useRouter();
 definePageMeta({
   middleware: ["auth"],
 });
-const logintxt = ref("");
-logintxt.value = getStorage("login");
 </script>

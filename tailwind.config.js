@@ -46,6 +46,8 @@ export default {
         },
         validation: {
           success: "#00AD90",
+          // hover
+          successHover: "#1B7B68",
           error: "#DD614A",
         },
         "primary-admin": {

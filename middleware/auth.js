@@ -4,7 +4,7 @@ import jwtDecode from "jwt-decode";
 export default defineNuxtRouteMiddleware((to, from) => {
   if (import.meta.client) {
     if (!getStorage("token")) {
-      return navigateTo("/login");
+      return navigateTo("/index");
     } else {
       // check expiration date of the token
       const token = getStorage("token");
@@ -13,7 +13,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       // convert expiration date in milisecond
       const expirationDate = new Date(limitDate * 1000);
       if (expirationDate < new Date()) {
-        return navigateTo("/login");
+        return navigateTo("/index");
       }
     }
   }
