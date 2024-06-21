@@ -2,7 +2,7 @@
   <button
     class="px-2 py-1 rounded-md"
     :class="{
-      _bgColor: 'bg-validation-success',
+      _bgColor: _bgColor == '' ? 'bg-validation-success' : _bgColor,
     }"
   >
     <!-- _bgHover:

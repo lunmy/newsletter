@@ -1,6 +1,6 @@
 <template>
   <div class="bg-slate-700 d-flex">
-    <img src="@/public/imgTest/logo.svg" alt="" />
+    <img src="@/public/img/logo.svg" alt="" />
 
     <span class="d-flex align-center mx-auto">
       <p class="text-white">Marques</p>
