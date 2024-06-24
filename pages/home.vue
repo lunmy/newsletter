@@ -9,15 +9,9 @@
     </span>
   </div>
   <div class="container mx-auto p-10 grid grid-cols-6 gap-6">
-    <!-- todo foreach client add card in grid -->
-    <!-- todo query bdd: userid
-      number of compagny
-      logo path
-      number of campaign
-      number of newsletter
-         -->
-    <brandCard _imageSrc="/img/auchan.svg" _campaignX="12" _newsX="64" />
+    <brandCard v-for="company in companiesList" />
 
+    <!-- <brandCard _imageSrc="/img/auchan.svg" _campaignX="12" _newsX="64" />
     <brandCard _imageSrc="/img/courir.svg" />
     <brandCard _imageSrc="/img/courtepaille.svg" />
     <brandCard _imageSrc="/img/dps.svg" />
@@ -25,7 +19,7 @@
     <brandCard _imageSrc="/img/parcAsterix.svg" />
     <brandCard _imageSrc="/img/sakara.svg" />
     <brandCard _imageSrc="/img/sakara.svg" />
-    <brandCard _imageSrc="/img/sakara.svg" />
+    <brandCard _imageSrc="/img/sakara.svg" /> -->
   </div>
 </template>
 
@@ -367,12 +361,24 @@ async function getCompagnies() {
       "}";
 
     const data = JSON.parse(json);
-    console.log("🚀 ~ getCompagnies ~ data:", data);
+
+    const compagniesList = ref(data["hydra:member"]);
+    // compagniesList.forEach((company) => {
+    //   const id = company["@id"];
+    //   // name
+    //   const name = company["name"];
+    //   // logo path
+    //   const logoPath = company["images"][0];
+    //   // number of campaign by company
+    //   const totalCampaign = company["campaigns"].length;
+    //   company["campaigns"].forEach((campaign) => {
+    //     const totalNews = campaign["newsletters"].length;
+    //   });
+    // });
   } catch (error) {
     console.log("Error fetching data");
   }
 }
+
 getCompagnies();
-// "hydra:member" → nombre de company
-// "hydra:member" item['images'] → logo path
 </script>
