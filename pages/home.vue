@@ -8,10 +8,16 @@
       <p class="text-white">NewsLetters</p>
     </span>
   </div>
-  <div class="container p-10 d-flex justify-evenly">
-    <brandCard />
-    <brandCard />
-    <brandCard />
+  <div class="container p-10 d-flex flex-wrap justify-evenly">
+    <brandCard _imageSrc="/img/auchan.svg" />
+    <brandCard _imageSrc="/img/courir.svg" />
+    <brandCard _imageSrc="/img/courtepaille.svg" />
+    <brandCard _imageSrc="/img/dps.svg" />
+    <brandCard _imageSrc="/img/macsf.svg" />
+    <brandCard _imageSrc="/img/parcAsterix.svg" />
+    <brandCard _imageSrc="/img/sakara.svg" />
+    <brandCard _imageSrc="/img/sakara.svg" />
+    <brandCard _imageSrc="/img/sakara.svg" />
   </div>
 </template>
 
