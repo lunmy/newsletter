@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 mb-10 w-64 h-80 border-sm rounded-lg">
+  <div class="p-4 mb-10 border-sm rounded-lg">
     <img class="w-40 mx-auto" :src="_imageSrc" alt="auchan logo" />
     <p class="mt-4">campaigns: 12</p>
     <p class="mt-2">newsletters: 145</p>

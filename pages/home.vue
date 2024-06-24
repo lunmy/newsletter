@@ -8,7 +8,7 @@
       <p class="text-white">NewsLetters</p>
     </span>
   </div>
-  <div class="container p-10 d-flex flex-wrap justify-evenly">
+  <div class="container mx-auto p-10 grid grid-cols-6 gap-6">
     <brandCard _imageSrc="/img/auchan.svg" />
     <brandCard _imageSrc="/img/courir.svg" />
     <brandCard _imageSrc="/img/courtepaille.svg" />
