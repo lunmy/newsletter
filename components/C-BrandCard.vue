@@ -24,14 +24,14 @@ const props = defineProps({
     default: "/img/logo.svg",
   },
   _campaignX: {
-    type: Number,
+    type: String,
     required: false,
-    default: 0,
+    default: "0",
   },
   _newsX: {
-    type: Number,
+    type: String,
     required: false,
-    default: 0,
+    default: "0",
   },
 });
 </script>
