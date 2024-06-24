@@ -9,7 +9,15 @@
     </span>
   </div>
   <div class="container mx-auto p-10 grid grid-cols-6 gap-6">
-    <brandCard _imageSrc="/img/auchan.svg" />
+    <!-- todo foreach client add card in grid -->
+    <!-- todo query bdd: userid
+      number of compagny
+      logo path
+      number of campaign
+      number of newsletter
+         -->
+    <brandCard _imageSrc="/img/auchan.svg" _campaignX="12" _newsX="64" />
+
     <brandCard _imageSrc="/img/courir.svg" />
     <brandCard _imageSrc="/img/courtepaille.svg" />
     <brandCard _imageSrc="/img/dps.svg" />
