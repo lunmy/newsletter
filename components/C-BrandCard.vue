@@ -16,9 +16,7 @@
     <p class="mt-2">
       newsletters:
       {{
-        company.campaigns && company.campaigns.newsletters
-          ? company.campaigns.newsletters.length
-          : "X"
+        newsletters
       }}
     </p>
     <span class="flex justify-between mt-4">
@@ -37,7 +35,17 @@
 <script setup>
 import Ubutton from "../components/U-nuxtLinkBtn.vue";
 
+const newsletters = ref(0);
 const props = defineProps({
   company: Object,
 });
+onMounted(() => {
+  if(props. company.campaigns && props.company.campaigns.length > 0)
+  {
+    props.company.campaigns.forEach((campaign) => {
+      newsletters.value += campaign.newsletters.length
+    })
+  }
+})
+
 </script>
