@@ -8,18 +8,12 @@
       <p class="text-white">NewsLetters</p>
     </span>
   </div>
-  <div class="container mx-auto p-10 grid grid-cols-6 gap-6">
-    <brandCard v-for="company in companiesList" />
 
-    <!-- <brandCard _imageSrc="/img/auchan.svg" _campaignX="12" _newsX="64" />
-    <brandCard _imageSrc="/img/courir.svg" />
-    <brandCard _imageSrc="/img/courtepaille.svg" />
-    <brandCard _imageSrc="/img/dps.svg" />
-    <brandCard _imageSrc="/img/macsf.svg" />
-    <brandCard _imageSrc="/img/parcAsterix.svg" />
-    <brandCard _imageSrc="/img/sakara.svg" />
-    <brandCard _imageSrc="/img/sakara.svg" />
-    <brandCard _imageSrc="/img/sakara.svg" /> -->
+  <div
+    v-if="companiesList !== null && companiesList.length > 0"
+    class="container mx-auto p-10 grid grid-cols-6 gap-6"
+  >
+    <brandCard v-for="company in companiesList" :company="company" />
   </div>
 </template>
 
@@ -362,23 +356,10 @@ async function getCompagnies() {
 
     const data = JSON.parse(json);
 
-    const compagniesList = ref(data["hydra:member"]);
-    // compagniesList.forEach((company) => {
-    //   const id = company["@id"];
-    //   // name
-    //   const name = company["name"];
-    //   // logo path
-    //   const logoPath = company["images"][0];
-    //   // number of campaign by company
-    //   const totalCampaign = company["campaigns"].length;
-    //   company["campaigns"].forEach((campaign) => {
-    //     const totalNews = campaign["newsletters"].length;
-    //   });
-    // });
+    return data["hydra:member"];
   } catch (error) {
     console.log("Error fetching data");
   }
 }
-
-getCompagnies();
+const companiesList = ref(await getCompagnies());
 </script>
