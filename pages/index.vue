@@ -68,7 +68,6 @@ import { setStorage } from "@/composables/storage";
 import { loginRule, passwordRule } from "@/composables/rules";
 
 const { $authApi } = useNuxtApp();
-console.log("🚀 ~ authApi:", $authApi);
 const router = useRouter();
 const loginForm = ref(null);
 const isloading = ref(false);

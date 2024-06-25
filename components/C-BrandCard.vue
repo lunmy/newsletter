@@ -1,12 +1,7 @@
 <template>
   <div class="p-4 mb-10 border-sm rounded-lg">
     <!-- LOGO -->
-    <img
-      v-if="company.images && company.images.length > 0"
-      class="w-40 mx-auto"
-      :src="company.images[0]"
-      alt="logo"
-    />
+    <img v-if="company.images && company.images.length > 0" class="w-40 mx-auto" :src="company.images[0]" alt="logo" />
     <!-- NUMBERS OF CAMPAIGNS -->
     <p class="mt-4">
       campaigns: {{ company.campaigns ? company.campaigns.length : "X" }}
@@ -19,11 +14,7 @@
     </p>
     <span class="flex justify-between mt-4">
       <!-- link to dell page -->
-      <Ubutton
-        _label="supprimer"
-        _borderColor="border-red-600"
-        _bgHover="hover:bg-red-700"
-      />
+      <Ubutton _label="supprimer" _borderColor="border-red-600" _bgHover="hover:bg-red-700" />
       <!-- link to modify page -->
       <Ubutton _label="modifier" _borderColor="border-validation-success" />
     </span>
@@ -38,6 +29,7 @@ const props = defineProps({
   company: Object,
 });
 onMounted(() => {
+
   if (props.company.campaigns && props.company.campaigns.length > 0) {
     props.company.campaigns.forEach((campaign) => {
       newsletters.value += campaign.newsletters.length;
