@@ -1,4 +1,4 @@
-export default defineNuxtPlugin((apiFetch) => {
+export default ({ apiFetch }) => {
   const checkAuth = async (username, password, app) => {
     const response = await apiFetch("/auth", {
       method: "POST",
@@ -9,4 +9,4 @@ export default defineNuxtPlugin((apiFetch) => {
       },
     });
   };
-});
+};

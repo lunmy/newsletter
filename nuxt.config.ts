@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     public: {
       NUXT_ENV_AUTH_API_BASE_URL: process.env.NUXT_ENV_AUTH_API_BASE_URL,
       NUXT_ENV_APP_TOKEN: process.env.NUXT_ENV_APP_TOKEN,
+      NUXT_ENV_API_SAMARKAND: process.env.NUXT_ENV_API_SAMARKAND,
     },
   },
   devtools: { enabled: true },
