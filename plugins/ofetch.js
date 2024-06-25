@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 import authOfetch from "@/plugins/authOfetch";
-import SamarkandApi from "@/plugins/api";
+import samarkandApi from "@/plugins/api";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
@@ -24,7 +24,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   return {
     provide: {
       authApi: authOfetch({ apiFetch: apiAuth }),
-      apiSamarkand: SamarkandApi({ apiFetch: apiSamarkand }),
+      apiSamarkand: samarkandApi({ apiFetch: apiSamarkand }),
     },
   };
 });

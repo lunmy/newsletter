@@ -1,12 +1,12 @@
-export default ({ apiFetch }) => {
-  const checkAuth = async (username, password, app) => {
-    const response = await apiFetch("/auth", {
-      method: "POST",
-      body: {
-        username,
-        password,
-        app,
-      },
-    });
-  };
-};
+export default ({apiFetch}) => ({
+    async checkAuth(username, password, app) {
+        return await apiFetch("/auth", {
+            method: "POST",
+            body: {
+                username,
+                password,
+                app,
+            },
+        });
+    }
+})

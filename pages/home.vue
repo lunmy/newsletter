@@ -9,12 +9,12 @@
     </span>
   </div>
 
-  <!-- <div
+ <div
     v-if="companiesList !== null && companiesList.length > 0"
     class="container mx-auto p-10 grid grid-cols-6 gap-6"
   >
     <brandCard v-for="company in companiesList" :company="company" />
-  </div> -->
+  </div>
 </template>
 
 <script setup>
@@ -22,26 +22,22 @@ import brandCard from "~/components/C-BrandCard.vue";
 definePageMeta({
   middleware: ["auth"],
 });
+const companiesList = ref([]);
 
 // instance api
-const { $api } = useNuxtApp();
-const test = useNuxtApp();
+const { $apiSamarkand } = useNuxtApp();
 const criteria = {
-  page: 1,
-  groups: ["campaign:read", "company:details"],
+  page: 2,
+  "groups[]": ["campaign:read", "company:details"],
 };
 
 async function getCompagniesList() {
   try {
-    console.log($api);
-    // missing query param and bearer token
-    const xhr = await $apiSamarkand.getCompanies(criteria);
-    // const response = await JSON.parse(xhr);
+    return await $apiSamarkand.getCompanies(criteria);
   } catch (error) {
     console.log("Error fetching data");
-    console.log(error);
   }
 }
-getCompagniesList();
+companiesList.value = await getCompagniesList();
 // const companiesList = ref(await getCompagniesList());
 </script>
