@@ -11,13 +11,11 @@
     <p class="mt-4">
       campaigns: {{ company.campaigns ? company.campaigns.length : "X" }}
     </p>
-    <!-- NUMBERS OF NEWSLETTERs -->
-    <!-- todo can't acces to the information. need an other v-for ?? -->
+    <!-- NUMBERS OF NEWSLETTERS -->
+
     <p class="mt-2">
       newsletters:
-      {{
-        newsletters
-      }}
+      {{ newsletters }}
     </p>
     <span class="flex justify-between mt-4">
       <!-- link to dell page -->
@@ -40,12 +38,10 @@ const props = defineProps({
   company: Object,
 });
 onMounted(() => {
-  if(props. company.campaigns && props.company.campaigns.length > 0)
-  {
+  if (props.company.campaigns && props.company.campaigns.length > 0) {
     props.company.campaigns.forEach((campaign) => {
-      newsletters.value += campaign.newsletters.length
-    })
+      newsletters.value += campaign.newsletters.length;
+    });
   }
-})
-
+});
 </script>
