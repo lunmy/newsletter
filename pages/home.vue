@@ -1,4 +1,5 @@
 <template>
+
   <div class="bg-slate-700 d-flex">
     <img src="@/public/img/logo.svg" alt="" />
 
@@ -17,12 +18,11 @@
 <script setup>
 
 import brandCard from "~/components/C-BrandCard.vue";
-definePageMeta({
-  middleware: ["auth"],
-});
+// definePageMeta({
+//   middleware: ["auth"],
+// });
 const companiesList = ref([]);
-
-// instance api
+// const tokenApp = useRuntimeConfig().public.
 const { $apiSamarkand } = useNuxtApp();
 const criteria = {
   page: 1,
@@ -41,7 +41,6 @@ async function getCompagniesList() {
 let list = []
 let nextPage = true
 
-
 while (nextPage) {
   let response = await getCompagniesList();
   let compagnies = await response["hydra:member"]
@@ -56,7 +55,5 @@ while (nextPage) {
 }
 
 companiesList.value = list
-console.log("🚀 ~ list:", list[0])
-
 
 </script>
