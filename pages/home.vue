@@ -41,18 +41,18 @@ async function getCompagniesList() {
 let list = []
 let nextPage = true
 
-while (nextPage) {
-  let response = await getCompagniesList();
-  let compagnies = await response["hydra:member"]
-  compagnies.forEach(company => {
-    list.push(company)
-  });
-  if (!response["hydra:view"]["hydra:next"]) {
-    nextPage = false
-  } else {
-    criteria['page']++
-  }
-}
+// while (nextPage) {
+//   let response = await getCompagniesList();
+//   let compagnies = await response["hydra:member"]
+//   compagnies.forEach(company => {
+//     list.push(company)
+//   });
+//   if (!response["hydra:view"]["hydra:next"]) {
+//     nextPage = false
+//   } else {
+//     criteria['page']++
+//   }
+// }
 
 companiesList.value = list
 
