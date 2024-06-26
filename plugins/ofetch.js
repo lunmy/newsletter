@@ -36,20 +36,7 @@ export default defineNuxtPlugin((nuxtApp) => {
      */
     async onRequest({ options }) {
       const token = getStorage("token");
-      if (token) {
-        const decoded = jwtDecode(token);
-        const expirationDate = new Date(decoded.exp * 1000);
-
-        if (expirationDate > new Date()) {
-          options.headers.Authorization = `Bearer ${token}`;
-        } else {
-          navigateTo("/");
-          throw new Error("Token expired");
-        }
-      } else {
-        navigateTo("/");
-        throw new Error("No token found");
-      }
+      options.headers.Authorization = `Bearer ${token}`;
     },
   });
 

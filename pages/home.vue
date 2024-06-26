@@ -22,35 +22,18 @@ const { $apiSamarkand } = useNuxtApp();
 
 const companiesList = ref([]);
 const criteria = {
-  page: 1,
   "groups[]": ["campaign:read", "company:details"],
 };
 
 async function getCompagniesList() {
   try {
-    return await $apiSamarkand.getCompanies(criteria);
+    return await $apiSamarkand.getAllCompanies(criteria);
   } catch (error) {
     console.log(error);
     console.log("Error fetching data");
   }
 }
 
-let list = []
-let nextPage = true
-
-while (nextPage) {
-  let response = await getCompagniesList();
-  let compagnies = await response["hydra:member"]
-  compagnies.forEach(company => {
-    list.push(company)
-  });
-  if (!response["hydra:view"]["hydra:next"]) {
-    nextPage = false
-  } else {
-    criteria['page']++
-  }
-}
-
-companiesList.value = list
+companiesList.value = await getCompagniesList();
 
 </script>
