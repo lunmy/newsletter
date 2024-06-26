@@ -1,25 +1,27 @@
 import { getStorage } from "@/composables/storage";
 import jwtDecode from "jwt-decode";
 
+/**
+ * Middleware function to handle route authentication and token expiration.
+ * Checks if the user is authenticated by verifying the token's expiration date.
+ * If the token is expired or invalid, redirects to the login page.
+ * Prevents infinite loop by avoiding redirection on the root path.
+ */
 export default defineNuxtRouteMiddleware((to, from) => {
-  // check if user is authenticated
   if (import.meta.client) {
     if (getStorage("token")) {
-      // check expiration date of the token
       const token = getStorage("token");
       const decoded = jwtDecode(token);
-      const limitDate = decoded.exp;
       // convert expiration date in milisecond
-      const expirationDate = new Date(limitDate * 1000);
-      // if not expired
+      const expirationDate = new Date(decoded.exp * 1000);
       if (expirationDate > new Date()) {
         return;
       }
     }
   }
-  // test to avoid infinite loop
-  if (to.path != from.path) {
-    // no token or invalid token redirect to login page
+  // avoid infinite loop
+  if (to.path != "/") {
     return navigateTo("/");
   }
+  return;
 });

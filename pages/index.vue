@@ -46,6 +46,10 @@ const login = ref("");
 const password = ref("");
 const tokenApp = useRuntimeConfig().public.NUXT_ENV_APP_TOKEN;
 
+/**
+ * Asynchronous function to validate input fields, interact with an API for validation,
+ * store login and token in localStorage, and navigate to a specific route based on the API response.
+ */
 async function checkInput() {
   // validate :rules
   const promise = loginForm.value.validate();
