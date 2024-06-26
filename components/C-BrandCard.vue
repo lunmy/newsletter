@@ -1,7 +1,7 @@
 <template>
-  <div class="p-4 mb-10 border-sm rounded-lg">
+  <div class="p-4 mb-10 border-sm rounded-lg shadow-lg ">
     <!-- LOGO -->
-    <img v-if="company.images && company.images.length > 0" class="w-40 mx-auto" :src="company.images[0]" alt="logo" />
+    <img v-if="company.images && company.images.length > 0" class="w-40 mx-auto" :src="company.images" alt="logo" />
     <!-- NUMBERS OF CAMPAIGNS -->
     <p class="mt-4">
       campaigns: {{ company.campaigns ? company.campaigns.length : "X" }}
@@ -14,7 +14,7 @@
     </p>
     <span class="flex justify-between mt-4">
       <!-- link to dell page -->
-      <Ubutton _label="supprimer" _borderColor="border-red-600" _bgHover="hover:bg-red-700" />
+      <Ubutton _label="supprimer" _borderColor="border-red-600" _bgHover="hover:bg-red-700" :_path=deletePath />
       <!-- link to modify page -->
       <Ubutton _label="modifier" _borderColor="border-validation-success" :_path=updatePath />
     </span>
@@ -27,10 +27,12 @@ import { getIdFromIri } from "@/composables/utils";
 
 const newsletters = ref(0);
 let updatePath = ref('')
+let deletePath = ref('')
 const props = defineProps({
   company: Object,
 });
 onMounted(() => {
+  deletePath.value = '/company/delete/' + getIdFromIri(props.company["@id"])
   updatePath.value = '/company/update/' + getIdFromIri(props.company["@id"])
   if (props.company.campaigns && props.company.campaigns.length > 0) {
     props.company.campaigns.forEach((campaign) => {
