@@ -1,6 +1,6 @@
-import { getStorage } from "@/composables/storage";
+import { isAuth } from "@/composables/storage";
 export function logOut() {
-  if (getStorage("token")) {
+  if (isAuth()) {
     localStorage.removeItem("token");
     localStorage.removeItem("login");
     navigateTo(`/`);

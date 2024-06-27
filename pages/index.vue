@@ -63,7 +63,8 @@ async function checkInput() {
           // add login & token in localStorage
           setStorage("login", login.value);
           setStorage("token", data.token);
-
+          // todo store user with useState()
+          // const user = useState('user', () => storeUser())
           navigateTo(`/home`);
         })
         .catch((error) => {
