@@ -27,13 +27,14 @@ const criteria = {
 
 async function getCompagniesList() {
   try {
-    return await $apiSamarkand.getAllCompanies(criteria);
+    companiesList.value = await $apiSamarkand.getAllCompanies(criteria);
+    return
+
   } catch (error) {
-    console.log(error);
-    console.log("Error fetching data");
+    // handling error here ??
+    console.log(error.status);
   }
 }
-
-companiesList.value = await getCompagniesList();
+getCompagniesList();
 
 </script>

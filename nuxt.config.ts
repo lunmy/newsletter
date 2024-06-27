@@ -9,4 +9,12 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss", "vuetify-nuxt-module", "@pinia/nuxt"],
+  app: {
+    head: {
+      title: 'Samarkand',
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/public/favicon.ico' }
+      ]
+    }
+  }
 });
