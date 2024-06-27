@@ -3,20 +3,21 @@
     <div>
         <NuxtLink class="mr-5" to="/home">Dashboard</NuxtLink>
         <NuxtLink class="mr-5" to="/">login</NuxtLink>
-        <button v-if="auth" @click="logout">logout</button>
+        <button v-if="user" @click="logout">logout</button>
 
     </div>
     <NuxtPage />
 
 </template>
 <script lang="ts" setup>
-import { isAuth } from '@/composables/storage';
-import { setStorage } from "@/composables/storage";
-const auth = ref(isAuth())
+import { setStorage, getStorage } from "@/composables/storage";
+const user = ref(false)
+user.value = getStorage("login") != null
 
 function logout() {
-    auth.value = false
-    setStorage('token', '')
-    navigateTo('/')
+    setStorage("login", '');
+    setStorage("token", '');
+    user.value = getStorage("login") != null
+    navigateTo('/');
 }
 </script>

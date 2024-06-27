@@ -9,7 +9,9 @@ export const useAuthStore = defineStore({
       token: null,
     };
   },
-
+  // persist: {
+  //   storage: persistedState.localStorage,
+  // },
   actions: {
     setUser(user) {
       this.user = user;
