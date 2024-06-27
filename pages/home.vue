@@ -4,7 +4,7 @@
     <img src="@/public/img/logo.svg" alt="" />
 
     <span class="d-flex align-center mx-auto">
-      <p class="text-white">Marques</p>
+      <p class="text-white">Companies</p>
       <p class="m-4 text-white">/</p>
       <p class="text-white">NewsLetters</p>
     </span>

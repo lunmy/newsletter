@@ -34,9 +34,13 @@ export default ({ apiFetch }) => ({
   },
 
   async getOneCompany(id) {
-    const response = await apiFetch(`${id}`, {
+    const xhr = await apiFetch.raw(`/companies/${id}`, {
       method: "GET",
     });
+    if (xhr.status === 200) {
+      return xhr._data;
+    }
+    return null;
   },
   async updateCompany(id, data) {
     const response = await apiFetch(`${id}`, {

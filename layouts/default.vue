@@ -3,21 +3,26 @@
     <div>
         <NuxtLink class="mr-5" to="/home">Dashboard</NuxtLink>
         <NuxtLink class="mr-5" to="/">login</NuxtLink>
+        <!-- <button @click="logout">logout</button> -->
         <button v-if="user" @click="logout">logout</button>
 
     </div>
     <NuxtPage />
 
 </template>
-<script lang="ts" setup>
+<script setup>
 import { setStorage, getStorage } from "@/composables/storage";
 const user = ref(false)
-user.value = getStorage("login") != null
+
+
 
 function logout() {
+    user.value = getStorage("login") != null
     setStorage("login", '');
     setStorage("token", '');
-    user.value = getStorage("login") != null
     navigateTo('/');
 }
+onMounted(() => {
+    user.value = getStorage("login")
+})
 </script>
