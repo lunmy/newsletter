@@ -1,4 +1,5 @@
-import { getStorage } from "@/composables/storage";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "~/store/auth";
 import jwtDecode from "jwt-decode";
 
 /**
@@ -8,17 +9,17 @@ import jwtDecode from "jwt-decode";
  * Prevents infinite loop by avoiding redirection on the root path.
  */
 export default defineNuxtRouteMiddleware((to, from) => {
-  if (import.meta.client) {
-    if (getStorage("token")) {
-      const token = getStorage("token");
-      const decoded = jwtDecode(token);
-      // convert expiration date in milisecond
-      const expirationDate = new Date(decoded.exp * 1000);
-      if (expirationDate > new Date()) {
-        return;
-      }
+  const { token } = storeToRefs(useAuthStore());
+  // if (import.meta.client) {
+  if (token.value) {
+    const decoded = jwtDecode(token.value);
+    // convert expiration date in milisecond
+    const expirationDate = new Date(decoded.exp * 1000);
+    if (expirationDate > new Date()) {
+      return;
     }
   }
+  // }
   // avoid infinite loop
   if (to.path != "/") {
     return navigateTo("/");

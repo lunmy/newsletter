@@ -1,28 +1,29 @@
 <template>
-    <!-- todo REMOVE: just for testing -->
     <div>
         <NuxtLink class="mr-5" to="/home">Dashboard</NuxtLink>
         <NuxtLink class="mr-5" to="/">login</NuxtLink>
-        <!-- <button @click="logout">logout</button> -->
-        <button v-if="user" @click="logout">logout</button>
-
+        <button v-if="display" @click="logout">logout</button>
     </div>
     <NuxtPage />
 
 </template>
 <script setup>
-import { setStorage, getStorage } from "@/composables/storage";
-const user = ref(false)
+import { useAuthStore } from "~/store/auth";
+const { user } = storeToRefs(useAuthStore());
+const { logUserOut } = useAuthStore()
 
-
-
+let display = ref(false)
+function updateDisplay() {
+    display.value = user.value !== null && user.value !== undefined
+}
+onMounted(async () => {
+    updateDisplay()
+})
+watch(user, () => {
+    updateDisplay()
+})
 function logout() {
-    user.value = getStorage("login") != null
-    setStorage("login", '');
-    setStorage("token", '');
+    logUserOut()
     navigateTo('/');
 }
-onMounted(() => {
-    user.value = getStorage("login")
-})
 </script>

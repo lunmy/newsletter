@@ -32,8 +32,9 @@
   </v-sheet>
 </template>
 <script setup>
-import { setStorage } from "@/composables/storage";
 import { loginRule, passwordRule } from "@/composables/rules";
+import { useAuthStore } from "~/store/auth";
+const { setToken, setUser } = useAuthStore()
 
 const { $authApi } = useNuxtApp();
 const router = useRouter();
@@ -41,15 +42,10 @@ const loginForm = ref(null);
 const isloading = ref(false);
 
 const errorMsg = ref("");
-
 const login = ref("");
 const password = ref("");
 const tokenApp = useRuntimeConfig().public.NUXT_ENV_APP_TOKEN;
 
-/**
- * Asynchronous function to validate input fields, interact with an API for validation,
- * store login and token in localStorage, and navigate to a specific route based on the API response.
- */
 async function checkInput() {
   // validate :rules
   const promise = loginForm.value.validate();
@@ -60,9 +56,10 @@ async function checkInput() {
       $authApi
         .checkAuth(login.value, password.value, tokenApp)
         .then((data) => {
-          // add login & token in localStorage
-          setStorage("login", login.value);
-          setStorage("token", data.token);
+          // set data in pinia storage
+          setUser(login.value);
+          setToken(data.token);
+
           navigateTo(`/home`);
         })
         .catch((error) => {

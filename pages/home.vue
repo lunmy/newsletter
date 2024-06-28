@@ -33,6 +33,7 @@ async function getCompagniesList() {
   } catch (error) {
     // handling error here ??
     console.log(error.status);
+    console.log(error);
   }
 }
 getCompagniesList();

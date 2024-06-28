@@ -1,8 +1,8 @@
 import { ofetch } from "ofetch";
 import authOfetch from "@/api/authOfetch";
 import samarkandApi from "@/api/api";
-import { getStorage } from "@/composables/storage";
-import jwtDecode from "jwt-decode";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "~/store/auth";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
@@ -35,8 +35,8 @@ export default defineNuxtPlugin((nuxtApp) => {
      * @throws {Error} - Throws an error if the token is expired or not found.
      */
     async onRequest({ options }) {
-      const token = getStorage("token");
-      options.headers.Authorization = `Bearer ${token}`;
+      const { token } = storeToRefs(useAuthStore());
+      options.headers.Authorization = `Bearer ${token.value}`;
     },
   });
 

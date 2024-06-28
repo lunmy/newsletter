@@ -1,4 +1,3 @@
-// todo REMOVE IF UNUSED
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore({
@@ -9,9 +8,9 @@ export const useAuthStore = defineStore({
       token: null,
     };
   },
-  // persist: {
-  //   storage: persistedState.localStorage,
-  // },
+  persist: {
+    storage: persistedState.localStorage,
+  },
   actions: {
     setUser(user) {
       this.user = user;

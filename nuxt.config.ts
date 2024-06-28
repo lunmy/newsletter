@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     },
   },
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "vuetify-nuxt-module", "@pinia/nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "vuetify-nuxt-module", "@pinia/nuxt", '@pinia-plugin-persistedstate/nuxt',],
   app: {
     head: {
       title: 'Samarkand',
