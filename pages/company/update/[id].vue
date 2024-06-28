@@ -2,8 +2,8 @@
 <template>
   <h1 class="text-xl font-bold text-center">Update</h1>
 
-  <span class="w-2/3 mx-auto mt-10 d-flex flex-row">
-    <div class="w-2/5">
+  <v-container class="fluid mx-auto mt-10 d-flex flex-row border-sm rounded-lg">
+    <div class="w-2/5 p-2">
       <v-text-field
         label="name"
         variant="solo-filled"
@@ -22,7 +22,7 @@
       <img class="w-60" :src="image" alt="" />
     </div>
 
-    <div class="w-1/5 d-flex justify-center pt-14">
+    <div class="w-1/5 d-flex justify-center pt-16">
       <svg
         width="53"
         height="16"
@@ -37,42 +37,49 @@
       </svg>
     </div>
 
-    <div class="w-2/5">
+    <div class="w-2/5 p-2">
       <v-text-field
-        label="name"
+        label="new name"
         variant="solo-filled"
         rounded="lg"
-        v-model="name"
+        v-model="newName"
       ></v-text-field>
       <v-text-field
         class="h-min"
-        v-model="image"
-        label="image"
+        v-model="newImage"
+        label="new image"
         variant="solo-filled"
         rounded="lg"
       ></v-text-field>
-      <img class="w-60" :src="image" alt="" />
+      <img class="w-60" :src="newImagePath" alt="" />
       <v-btn
         class="mt-2 bg-secondary"
         width="90%"
         type="button"
+        block
         @click="updateCompany()"
         rounded="lg"
         :loading="isloading"
         ><span class="text-0 font-semibold text-base"> update </span></v-btn
       >
     </div>
-  </span>
+  </v-container>
 </template>
 <script setup>
 const { $apiSamarkand } = useNuxtApp();
 const route = useRoute();
+
 const company = ref();
-const isloading = ref(false);
+// ref data
+const idComp = ref("");
 const name = ref("");
 const image = ref("");
-const idComp = ref("");
+// new data
+const newName = ref("");
+const newImage = ref("");
+const newImagePath = ref("");
 
+const isloading = ref(false);
 async function getCompanyInfo() {
   try {
     const id = route.params.id;
@@ -86,9 +93,27 @@ async function getCompanyInfo() {
   }
 }
 
-async function updateCompany() {
-  console.log("update");
+function reset() {
+  isloading.value = false;
+  newName.value = "";
+  newImage.value = "";
+  newImagePath.value = "";
+  getCompanyInfo();
 }
+async function updateCompany() {
+  try {
+    isloading.value = true;
+    const data = JSON.stringify({
+      name: newName.value,
+      //   todo see how handle adding picture
+      //   images: [newImage.value],
+    });
 
+    await $apiSamarkand.updateCompany(idComp.value, data);
+    reset();
+  } catch (error) {
+    console.log(error);
+  }
+}
 getCompanyInfo();
 </script>

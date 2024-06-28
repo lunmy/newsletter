@@ -43,12 +43,13 @@ export default ({ apiFetch }) => ({
     return null;
   },
   async updateCompany(id, data) {
-    const response = await apiFetch(`${id}`, {
+    const response = await apiFetch(`/companies/${id}`, {
       method: "PATCH",
       body: data,
       headers: {
         "Content-Type": "application/merge-patch+json",
       },
     });
+    return response;
   },
 });
