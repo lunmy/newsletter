@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import brandCard from "~/components/C-BrandCard.vue";
+import brandCard from "~/components/companyCard.vue";
 const { $apiSamarkand } = useNuxtApp();
 
 const companiesList = ref([]);

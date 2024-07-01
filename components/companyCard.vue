@@ -1,7 +1,6 @@
 <template>
   <div class="p-4 mb-10 border-sm rounded-lg shadow-lg">
     <!-- LOGO -->
-    <!-- todo get company.images not working. missing bearer token ?? -->
     <img
       v-if="company.images && company.images.length > 0"
       class="w-40 mx-auto"
@@ -37,7 +36,7 @@
 </template>
 
 <script setup>
-import Ubutton from "../components/U-nuxtLinkBtn.vue";
+import Ubutton from "./linkBtn.vue";
 import { getIdFromIri } from "@/composables/utils";
 
 const newsletters = ref(0);
