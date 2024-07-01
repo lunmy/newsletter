@@ -51,6 +51,8 @@
         variant="solo-filled"
         rounded="lg"
       ></v-text-field>
+      <!-- todo use form-data to insert image -->
+      <form-data></form-data>
       <img class="w-60" :src="newImagePath" alt="" />
       <v-btn
         class="mt-2 bg-secondary"

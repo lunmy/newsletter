@@ -11,7 +11,7 @@ export default defineNuxtPlugin((nuxtApp) => {
    * create ofetch instance for authentificationAPI
    */
   const apiAuth = ofetch.create({
-    baseURL: config.public.NUXT_ENV_AUTH_API_BASE_URL,
+    baseURL: config.public.NUXT_ENV_API_SAMARKAND,
     headers: {
       Accept: "application/ld+json",
       "Content-Type": "application/ld+json",

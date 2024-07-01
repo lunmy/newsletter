@@ -66,9 +66,8 @@ const loginForm = ref(null);
 const isloading = ref(false);
 
 const errorMsg = ref("");
-const login = ref("");
-const password = ref("");
-const tokenApp = useRuntimeConfig().public.NUXT_ENV_APP_TOKEN;
+const login = ref("superadmin@syneidolab.com");
+const password = ref("super_admin");
 
 async function checkInput() {
   // validate :rules
@@ -78,7 +77,7 @@ async function checkInput() {
       isloading.value = true;
       // check API for validation
       $authApi
-        .checkAuth(login.value, password.value, tokenApp)
+        .checkAuth(login.value, password.value)
         .then((data) => {
           // set data in pinia storage
           setUser(login.value);
