@@ -6,22 +6,22 @@
         label="name"
         variant="solo-filled"
         rounded="lg"
-        v-model="name"
+        v-model="_name"
       ></v-text-field>
       <v-text-field
         class="h-min"
-        v-model="image"
+        v-model="_imgPath"
         label="image path"
         variant="solo-filled"
         rounded="lg"
       ></v-text-field>
-      <img class="w-60 mx-auto" :src="image" alt="" />
+      <img class="w-60 mx-auto" :src="_imgPath" alt="" />
       <v-btn
         class="mt-2 bg-secondary"
         width="90%"
         type="button"
         block
-        @click="updateCompany()"
+        @click="submit"
         rounded="lg"
         :loading="isloading"
         ><span class="text-0 font-semibold text-base"> update </span></v-btn
@@ -29,55 +29,26 @@
     </div>
   </v-container>
 </template>
+
 <script setup>
-const { $apiSamarkand } = useNuxtApp();
-const route = useRoute();
-
-const company = ref();
-// ref data
-const idComp = ref("");
-const name = ref("");
-const image = ref("");
-// new data
-const newName = ref("");
-const newImage = ref("");
-const newImagePath = ref("");
-
 const isloading = ref(false);
-async function getCompanyInfo() {
-  try {
-    const id = route.params.id;
-    company.value = await $apiSamarkand.getOneCompany(id);
-    name.value = company.value.name || "";
-    image.value = company.value.images[0] || "";
-    idComp.value = id || "";
-    return;
-  } catch (error) {
-    console.log(error);
-  }
-}
+const _name = ref("");
+const _imgPath = ref("");
 
-function reset() {
-  isloading.value = false;
-  newName.value = "";
-  newImage.value = "";
-  newImagePath.value = "";
-  getCompanyInfo();
-}
-async function updateCompany() {
-  try {
-    isloading.value = true;
-    const data = JSON.stringify({
-      name: newName.value,
-      //   todo see how handle adding picture
-      //   images: [newImage.value],
-    });
+const emit = defineEmits(["submit"]);
 
-    await $apiSamarkand.updateCompany(idComp.value, data);
-    reset();
-  } catch (error) {
-    console.log(error);
-  }
+const props = defineProps({
+  company: {
+    type: Object,
+  },
+});
+
+onMounted(() => {
+  _name.value = props.company["name"] || "";
+  _imgPath.value = props.company["images"][0] || "";
+});
+
+function submit() {
+  emit("submit", { newName: _name.value, imgPath: _imgPath.value });
 }
-getCompanyInfo();
 </script>

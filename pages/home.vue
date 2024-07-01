@@ -19,7 +19,6 @@ const criteria = {
 async function getCompagniesList() {
   try {
     companiesList.value = await $apiSamarkand.getAllCompanies(criteria);
-    return;
   } catch (error) {
     // handling error here ??
     console.log(error.status);
