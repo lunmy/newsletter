@@ -6,6 +6,7 @@
 
 <script setup>
 import companyForm from "../components/companyForm.vue";
+import { getIdFromIri } from "@/composables/utils";
 
 const { $apiSamarkand } = useNuxtApp();
 const route = useRoute();
@@ -30,13 +31,23 @@ function reset() {
   isloading.value = false;
   getCompanyInfo();
 }
-async function updateCompany(newData) {
+async function updateCompany(data) {
   try {
     isloading.value = true;
-    const data = JSON.stringify({
-      name: newData.newName,
-    });
-    await $apiSamarkand.updateCompany(id, data);
+    // delete old image
+    // await $apiSamarkand.removeCompanyImage(
+    //   id,
+    //   getIdFromIri(data.company["images"][0])
+    // );
+    // add new one
+    const img = new FormData();
+    // insert Blob ??
+    img.append("file", data.newImg.value);
+    img.append("title", "queltitre");
+    img.append("tag", "desktop");
+    await $apiSamarkand.setCompanyIamge(id, img);
+
+    await $apiSamarkand.updateCompany(id, data.company);
     reset();
   } catch (error) {
     console.log(error);

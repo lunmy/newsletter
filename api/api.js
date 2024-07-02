@@ -43,13 +43,37 @@ export default ({ apiFetch }) => ({
     return null;
   },
   async updateCompany(id, data) {
-    const response = await apiFetch(`/companies/${id}`, {
+    const xhr = await apiFetch.raw(`/companies/${id}`, {
       method: "PATCH",
       body: data,
       headers: {
         "Content-Type": "application/merge-patch+json",
       },
     });
-    return response;
+    if (xhr.status === 200) {
+      return xhr._data;
+    }
+    return null;
+  },
+
+  async removeCompanyImage(idComp, idImg) {
+    const xhr = await apiFetch.raw(`/companies/${idComp}/image/${idImg}`, {
+      method: "DELETE",
+    });
+    if (xhr.status === 204) {
+      return true;
+    }
+    return false;
+  },
+
+  async setCompanyIamge(idComp, data) {
+    const xhr = await apiFetch.raw(`/companies/${idComp}/image`, {
+      body: data,
+      method: "POST",
+    });
+    if (xhr.status === 201) {
+      return true;
+    }
+    return false;
   },
 });
