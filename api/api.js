@@ -38,7 +38,7 @@ export default ({ apiFetch }) => ({
       method: "GET",
     });
     if (xhr.status === 200) {
-      return xhr._data;
+      return await xhr._data;
     }
     return null;
   },
@@ -60,23 +60,16 @@ export default ({ apiFetch }) => ({
     const xhr = await apiFetch.raw(`/companies/${idComp}/image/${idImg}`, {
       method: "DELETE",
     });
-    if (xhr.status === 204) {
-      return true;
-    }
-    return false;
   },
 
   async setCompanyIamge(idComp, data) {
-    const xhr = await apiFetch(`/companies/${idComp}/image`, {
+    const xhr = await apiFetch.raw(`/companies/${idComp}/image`, {
       body: data,
       method: "POST",
       headers: {
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": "multipart/form-data",
+        // "Content-Type": "application/ld+json",
       },
     });
-    if (xhr.status === 201) {
-      return true;
-    }
-    return false;
   },
 });

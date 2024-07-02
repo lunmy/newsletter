@@ -27,31 +27,31 @@ if (route.params.id !== null && route.params.id !== undefined) {
   await getCompanyInfo();
 }
 
-function reset() {
+async function reset() {
   isloading.value = false;
-  getCompanyInfo();
+  await getCompanyInfo();
 }
 async function updateCompany(data) {
   try {
     isloading.value = true;
-    // delete old image
-    // await $apiSamarkand.removeCompanyImage(
-    //   id,
-    //   getIdFromIri(data.company["images"][0])
-    // );
 
+    // delete old image if existing one
+    if (data.company["images"][0] !== undefined) {
+      await $apiSamarkand.removeCompanyImage(
+        id,
+        getIdFromIri(data.company["images"][0])
+      );
+    }
     // add new one
     const img = new FormData();
     img.append("file", data.newImg.value[0]);
     img.append("title", "untitre");
     img.append("tag", "desktop");
-
-    console.log("updateCompany ~id, img:", id, img);
-
     await $apiSamarkand.setCompanyIamge(id, img);
-
+    // get new img id
+    data.company.images[0] = await $apiSamarkand.getOneCompany(id);
     await $apiSamarkand.updateCompany(id, data.company);
-    reset();
+    await reset();
   } catch (error) {
     console.log(error);
   }
