@@ -39,12 +39,15 @@ async function updateCompany(data) {
     //   id,
     //   getIdFromIri(data.company["images"][0])
     // );
+
     // add new one
     const img = new FormData();
-    // insert Blob ??
-    img.append("file", data.newImg.value);
-    img.append("title", "queltitre");
+    img.append("file", data.newImg.value[0]);
+    img.append("title", "untitre");
     img.append("tag", "desktop");
+
+    console.log("updateCompany ~id, img:", id, img);
+
     await $apiSamarkand.setCompanyIamge(id, img);
 
     await $apiSamarkand.updateCompany(id, data.company);

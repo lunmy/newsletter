@@ -67,9 +67,12 @@ export default ({ apiFetch }) => ({
   },
 
   async setCompanyIamge(idComp, data) {
-    const xhr = await apiFetch.raw(`/companies/${idComp}/image`, {
+    const xhr = await apiFetch(`/companies/${idComp}/image`, {
       body: data,
       method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     if (xhr.status === 201) {
       return true;
