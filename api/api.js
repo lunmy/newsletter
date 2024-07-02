@@ -66,10 +66,6 @@ export default ({ apiFetch }) => ({
     const xhr = await apiFetch.raw(`/companies/${idComp}/image`, {
       body: data,
       method: "POST",
-      headers: {
-        // "Content-Type": "multipart/form-data",
-        // "Content-Type": "application/ld+json",
-      },
     });
   },
 });

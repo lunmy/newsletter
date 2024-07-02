@@ -24,9 +24,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const apiSamarkand = ofetch.create({
     baseURL: config.public.NUXT_ENV_API_SAMARKAND,
     headers: {
-      Accept: ["*/*", "application/ld+json", "multipart/form-data"],
-
-      // "Content-Type": "application/ld+json",
+      Accept: "*/*",
     },
     /**
      * Handles the request before it is sent, adding the token to the header if it is valid.

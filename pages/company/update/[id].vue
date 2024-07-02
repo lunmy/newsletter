@@ -34,23 +34,21 @@ async function reset() {
 async function updateCompany(data) {
   try {
     isloading.value = true;
+        await $apiSamarkand.updateCompany(id, data.company);
 
-    // delete old image if existing one
-    if (data.company["images"][0] !== undefined) {
-      await $apiSamarkand.removeCompanyImage(
-        id,
-        getIdFromIri(data.company["images"][0])
+    if(data.newImg.value.length > 0 && data.newImg.value[0] !== undefined) {
+      // delete old image
+      await $apiSamarkand.removeCompanyImage(id,getIdFromIri(data.company["images"][0])
       );
+
+      // add new one
+      const img = new FormData();
+      img.append("file", data.newImg.value[0]);
+      img.append("tag", "desktop");
+
+
+      await $apiSamarkand.setCompanyIamge(id, img);
     }
-    // add new one
-    const img = new FormData();
-    img.append("file", data.newImg.value[0]);
-    img.append("title", "untitre");
-    img.append("tag", "desktop");
-    await $apiSamarkand.setCompanyIamge(id, img);
-    // get new img id
-    data.company.images[0] = await $apiSamarkand.getOneCompany(id);
-    await $apiSamarkand.updateCompany(id, data.company);
     await reset();
   } catch (error) {
     console.log(error);
