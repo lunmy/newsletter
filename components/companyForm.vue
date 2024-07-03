@@ -1,7 +1,7 @@
 <!-- modify brand image or name -->
 <template>
   <v-container class="fluid">
-    <div class="w-2/5 p-10 mx-auto mt-10 border-sm rounded-lg">
+    <div class="w-2/5 p-10 mx-auto border-sm rounded-lg">
       <v-form ref="form">
         <v-text-field
           label="name"
@@ -20,7 +20,7 @@
           rounded="lg"
         ></v-file-input>
 
-        <img class="w-60 mx-auto" :src="company.images" alt="" />
+        <img class="w-60 mx-auto" :src="image" alt="" />
 
         <v-btn
           class="mt-2 bg-secondary"
@@ -39,17 +39,31 @@
 
 <script setup>
 import { textRule } from "@/composables/rules";
-const isloading = ref(false);
-const newImg = ref([]);
-
-const emit = defineEmits(["submit"]);
-const form = ref(null);
 const props = defineProps({
   company: {
     type: Object,
   },
 });
+const isloading = ref(false);
+const newImg = ref([]);
+const image = ref(props.company.images || "");
 
+const emit = defineEmits(["submit"]);
+const form = ref(null);
+
+/**
+ * Watches for changes in the 'newImg' ref and updates the 'image' ref with the data URL of the selected file.
+ */
+watch(newImg, (newVal) => {
+  if (newVal && newVal.length > 0) {
+    const file = newVal[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      image.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
 /**
  * Function that emits a 'submit' event with the new name and image path values.
  */

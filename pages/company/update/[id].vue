@@ -1,6 +1,12 @@
 <!-- modify brand image or name -->
 <template>
   <h1 class="text-xl font-bold text-center">Update</h1>
+  <p
+    v-if="modifictaion"
+    class="py-4 text-center text-xl font-semibold text-green-500"
+  >
+    Modification réussi
+  </p>
   <companyForm :company="company" @submit="updateCompany" />
 </template>
 
@@ -10,7 +16,7 @@ import { getIdFromIri } from "@/composables/utils";
 
 const { $apiSamarkand } = useNuxtApp();
 const route = useRoute();
-
+const modifictaion = ref(false);
 const company = ref("");
 const isloading = ref(false);
 const id = route.params.id;
@@ -34,11 +40,13 @@ async function reset() {
 async function updateCompany(data) {
   try {
     isloading.value = true;
-        await $apiSamarkand.updateCompany(id, data.company);
+    await $apiSamarkand.updateCompany(id, data.company);
 
-    if(data.newImg.value.length > 0 && data.newImg.value[0] !== undefined) {
+    if (data.newImg.value.length > 0 && data.newImg.value[0] !== undefined) {
       // delete old image
-      await $apiSamarkand.removeCompanyImage(id,getIdFromIri(data.company["images"][0])
+      await $apiSamarkand.removeCompanyImage(
+        id,
+        getIdFromIri(data.company["images"][0])
       );
 
       // add new one
@@ -46,8 +54,8 @@ async function updateCompany(data) {
       img.append("file", data.newImg.value[0]);
       img.append("tag", "desktop");
 
-
       await $apiSamarkand.setCompanyIamge(id, img);
+      modifictaion.value = true;
     }
     await reset();
   } catch (error) {
