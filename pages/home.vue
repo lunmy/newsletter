@@ -1,9 +1,13 @@
 <template>
   <div
     v-if="companiesList !== null && companiesList.length > 0"
-    class="container mx-auto p-10 grid grid-cols-5 gap-6"
+    class="mx-auto p-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6"
   >
-    <brandCard v-for="company in companiesList" :company="company" />
+    <brandCard
+      class="mx-auto"
+      v-for="company in companiesList"
+      :company="company"
+    />
   </div>
 </template>
 
