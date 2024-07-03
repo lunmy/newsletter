@@ -1,8 +1,16 @@
 <template>
   <v-container class="fluid">
-    <!-- <v-skeleton-loader v-if="loaded" type="button"> </v-skeleton-loader> -->
-    <div v-if="!loaded" class="w-2/5 p-10 mx-auto border-sm rounded-lg">
-      <v-form ref="form">
+    <div class="w-2/5 p-10 mx-auto border-sm rounded-lg">
+      <div v-if="loaded" class="w-full">
+        <div class="animate-pulse bg-gray-300 h-14 w-full rounded-lg"></div>
+        <div
+          class="animate-pulse my-6 bg-gray-300 h-14 w-full rounded-lg"
+        ></div>
+        <div class="animate-pulse my-6 mx-auto bg-gray-300 h-60 w-60"></div>
+        <div class="animate-pulse bg-gray-300 h-10 w-full rounded-lg"></div>
+      </div>
+
+      <v-form v-else ref="form">
         <v-text-field
           label="name"
           variant="solo-filled"
