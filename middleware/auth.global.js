@@ -1,6 +1,5 @@
-import { storeToRefs } from "pinia";
-import { useAuthStore } from "~/store/auth";
 import jwtDecode from "jwt-decode";
+import { useCookie } from "nuxt/app";
 
 /**
  * Middleware function to handle route authentication and token expiration.
@@ -8,10 +7,10 @@ import jwtDecode from "jwt-decode";
  * If the token is expired or invalid, redirects to the login page.
  * Prevents infinite loop by avoiding redirection on the root path.
  */
-export default defineNuxtRouteMiddleware((to, from) => {
-  const { token } = storeToRefs(useAuthStore());
-  // if (import.meta.client) {
-  if (token.value) {
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const token = await useCookie("token");
+
+  if (token.value !== undefined) {
     const decoded = jwtDecode(token.value);
     // convert expiration date in milisecond
     const expirationDate = new Date(decoded.exp * 1000);
@@ -19,7 +18,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       return;
     }
   }
-  // }
+
   // avoid infinite loop
   if (to.path != "/") {
     return navigateTo("/");

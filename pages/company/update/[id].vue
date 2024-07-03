@@ -1,4 +1,3 @@
-<!-- modify brand image or name -->
 <template>
   <h1 class="text-xl font-bold text-center">Update</h1>
   <p
@@ -17,8 +16,7 @@ import { getIdFromIri } from "@/composables/utils";
 const { $apiSamarkand } = useNuxtApp();
 const route = useRoute();
 const modifictaion = ref(false);
-const company = ref("");
-const isloading = ref(false);
+const company = ref({});
 const id = route.params.id;
 
 async function getCompanyInfo() {
@@ -29,17 +27,8 @@ async function getCompanyInfo() {
   }
 }
 
-if (route.params.id !== null && route.params.id !== undefined) {
-  await getCompanyInfo();
-}
-
-async function reset() {
-  isloading.value = false;
-  await getCompanyInfo();
-}
 async function updateCompany(data) {
   try {
-    isloading.value = true;
     await $apiSamarkand.updateCompany(id, data.company);
 
     if (data.newImg.value.length > 0 && data.newImg.value[0] !== undefined) {
@@ -57,9 +46,13 @@ async function updateCompany(data) {
       await $apiSamarkand.setCompanyIamge(id, img);
       modifictaion.value = true;
     }
-    await reset();
+    getCompanyInfo();
   } catch (error) {
     console.log(error);
   }
+}
+
+if (route.params.id !== null && route.params.id !== undefined) {
+  await getCompanyInfo();
 }
 </script>
