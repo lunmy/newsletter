@@ -2,7 +2,7 @@
   <div
     class="p-4 mb-10 w-64 h-80 border-sm rounded-lg shadow-lg d-flex flex-col"
   >
-    <nuxt-link class="h-5/6" to="/campaigns/view/index.vue">
+    <nuxt-link class="h-5/6" :to="campaignPath">
       <p class="h-1/5 text-center border-b border-gray-300">
         {{ company.name }}
       </p>
@@ -50,6 +50,7 @@ import { getIdFromIri } from "@/composables/utils";
 const newsletters = ref(0);
 const updatePath = ref("");
 const deletePath = ref("");
+const campaignPath = ref("");
 //list of campaigns: [{idCampaign: [idNewsletters, ...]}, ...]
 const campaignList = ref([]);
 const props = defineProps({
@@ -57,8 +58,10 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  deletePath.value = "/company/delete/" + getIdFromIri(props.company["@id"]);
-  updatePath.value = "/company/update/" + getIdFromIri(props.company["@id"]);
+  const companyId = getIdFromIri(props.company["@id"]);
+  campaignPath.value = "/campaigns/view/" + companyId;
+  deletePath.value = "/company/delete/" + companyId;
+  updatePath.value = "/company/update/" + companyId;
   if (props.company.campaigns && props.company.campaigns.length > 0) {
     props.company.campaigns.forEach((campaign) => {
       newsletters.value += campaign.newsletters.length;

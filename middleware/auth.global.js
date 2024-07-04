@@ -9,16 +9,16 @@ import { useCookie } from "nuxt/app";
  */
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const token = await useCookie("token");
-
-  if (token.value !== undefined) {
-    const decoded = jwtDecode(token.value);
-    // convert expiration date in milisecond
-    const expirationDate = new Date(decoded.exp * 1000);
-    if (expirationDate > new Date()) {
-      return;
+  if (import.meta.client) {
+    if (token.value !== undefined) {
+      const decoded = jwtDecode(token.value);
+      // convert expiration date in milisecond
+      const expirationDate = new Date(decoded.exp * 1000);
+      if (expirationDate > new Date()) {
+        return;
+      }
     }
   }
-
   // avoid infinite loop
   if (to.path != "/") {
     return navigateTo("/");
