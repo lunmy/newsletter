@@ -1,7 +1,9 @@
 <template>
-  <button class="px-2 py-1 border-solid border-1 rounded-md"
-    :class="[_bgColor, _bgHover, _borderColor, _txtColor, _txtHover]">
-    <NuxtLink class="text-center font-semibold" :to="_path">
+  <button
+    class="px-2 py-1 border-solid border-1 rounded-md text-center align-middle font-semibold"
+    :class="[_bgColor, _bgHover, _borderColor, _txtColor, _txtHover]"
+  >
+    <NuxtLink class="my-auto" :to="_path">
       {{ _label }}
     </NuxtLink>
   </button>
@@ -12,7 +14,7 @@ const props = defineProps({
   _path: {
     type: String,
     required: false,
-    default: '#',
+    default: "#",
   },
   _label: {
     type: String,

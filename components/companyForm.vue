@@ -1,6 +1,7 @@
 <template>
   <v-container class="fluid">
     <div class="w-2/5 p-10 mx-auto border-sm rounded-lg">
+      <!-- loader -->
       <div v-if="loaded" class="w-full">
         <div class="animate-pulse bg-gray-300 h-14 w-full rounded-lg"></div>
         <div
