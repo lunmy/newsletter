@@ -1,6 +1,8 @@
 <template>
   <div class="bg-slate-700 d-flex">
-    <img src="@/public/img/logo.svg" alt="" />
+    <nuxtLink to="/home">
+      <img src="@/public/img/logo.svg" alt="logo Samarkand" />
+    </nuxtLink>
 
     <span class="d-flex align-center ml-auto mr-6">
       <div class="text-center">

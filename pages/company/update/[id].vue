@@ -44,8 +44,8 @@ async function updateCompany(data) {
       img.append("tag", "desktop");
 
       await $apiSamarkand.setCompanyIamge(id, img);
-      modifictaion.value = true;
     }
+    modifictaion.value = true;
     getCompanyInfo();
   } catch (error) {
     console.log(error);
