@@ -6,7 +6,7 @@
   >
     Modification réussi
   </p>
-  <companyForm :company="company" @submit="updateCompany" />
+  <companyForm :company="company" :loading="loading" @submit="updateCompany" />
 </template>
 
 <script setup>
@@ -18,6 +18,7 @@ const route = useRoute();
 const modifictaion = ref(false);
 const company = ref({});
 const id = route.params.id;
+const loading = ref(false);
 
 async function getCompanyInfo() {
   try {
@@ -29,6 +30,7 @@ async function getCompanyInfo() {
 
 async function updateCompany(data) {
   try {
+    loading.value = true;
     await $apiSamarkand.updateCompany(id, data.company);
 
     if (data.newImg.value.length > 0 && data.newImg.value[0] !== undefined) {
@@ -50,6 +52,7 @@ async function updateCompany(data) {
   } catch (error) {
     console.log(error);
   }
+  loading.value = false;
 }
 
 if (route.params.id !== null && route.params.id !== undefined) {

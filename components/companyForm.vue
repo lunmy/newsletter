@@ -2,7 +2,7 @@
   <v-container class="fluid">
     <div class="w-2/5 p-10 mx-auto border-sm rounded-lg">
       <!-- loader -->
-      <div v-if="loaded" class="w-full">
+      <div v-if="company == []" class="w-full">
         <div class="animate-pulse bg-gray-300 h-14 w-full rounded-lg"></div>
         <div
           class="animate-pulse my-6 bg-gray-300 h-14 w-full rounded-lg"
@@ -38,7 +38,7 @@
           block
           @click="submit"
           rounded="lg"
-          :loading="isloading"
+          :loading="props.loading"
         >
           <span class="text-0 font-semibold text-base"> update </span>
         </v-btn>
@@ -54,26 +54,16 @@ const props = defineProps({
   company: {
     type: Object,
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 });
-const loaded = ref(true);
-const isloading = ref(false);
+
 const newImg = ref([]);
-
 const image = ref(props.company.images);
-
 const emit = defineEmits(["submit"]);
 const form = ref(null);
-
-watch(
-  () => props.company,
-  async (data) => {
-    if (data && data.images) {
-      image.value = await data.images;
-      loaded.value = false;
-    }
-  },
-  { immediate: true }
-);
 
 watch(newImg, (data) => {
   if (data && data.length > 0) {
@@ -90,10 +80,7 @@ function submit() {
   const validation = form.value.validate();
   validation.then(async (success) => {
     if (success.valid) {
-      isloading.value = true;
       emit("submit", { company: props.company, newImg });
-      isloading.value = false;
-      loaded.value = true;
     }
   });
 }

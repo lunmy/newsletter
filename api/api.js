@@ -73,10 +73,8 @@ export default ({ apiFetch }) => ({
     const xhr = await apiFetch.raw(`/campaigns/${id}`, {
       method: "GET",
     });
-    // il manqué ça
     if (xhr.status === 200) {
       return xhr._data;
     }
-    //
   },
 });
