@@ -32,6 +32,33 @@ export default ({ apiFetch }) => ({
 
     return datas;
   },
+  async getAllCampaigns(criteria) {
+    const datas = [];
+    let page =
+      criteria === null || criteria.page === undefined ? 1 : criteria.page;
+    let hasNext = true;
+    do {
+      // use raw fetch to catch the status code
+      const xhr = await apiFetch.raw("/campaigns", {
+        method: "GET",
+        params: { ...criteria, page },
+      });
+      if (xhr.status === 200) {
+        const response = await xhr._data;
+        let campaigns = await response["hydra:member"];
+        campaigns.forEach((campaign) => {
+          datas.push(campaign);
+        });
+
+        if (!response["hydra:view"]["hydra:next"]) {
+          hasNext = false;
+        }
+        page++;
+      }
+    } while (hasNext);
+
+    return datas;
+  },
 
   async getOneCompany(id) {
     const xhr = await apiFetch.raw(`/companies/${id}`, {

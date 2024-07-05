@@ -1,18 +1,27 @@
 <template>
-  <div class="w-4/5 mx-auto">
-    <h1 class="p-4 text-2xl font-bold">Campaigns</h1>
-    <div class="w-2/5">
-      <ul v-for="campaign in campaignsList" :key="campaign.id">
-        <li @click="getCampaignNewsletters">{{ campaign.name }}</li>
-        <ul v-for="campaign in campaignsList" :key="campaign.id">
-          <li v-for="id in campaign['newsletters']">
-            {{ getIdFromIri(id) }}
-          </li>
-        </ul>
-      </ul>
-    </div>
-    <div class="w-2/5"></div>
-  </div>
+  <!-- need all campaign of a company -->
+  <!-- foreach campaign need all newsletters -->
+  <h1 class="p-4 text-2xl font-bold text-center">Campaigns</h1>
+  <v-data-table
+    :group-by="groupBy"
+    :headers="headers"
+    :items="newslettersList"
+    item-value="name"
+  >
+    <template v-slot:group-header="{ item, columns, toggleGroup, isGroupOpen }">
+      <tr>
+        <td :colspan="columns.length">
+          <VBtn
+            :icon="isGroupOpen(item) ? '$expand' : '$next'"
+            size="small"
+            variant="text"
+            @click="toggleGroup(item)"
+          ></VBtn>
+          {{ item.value }}
+        </td>
+      </tr>
+    </template>
+  </v-data-table>
 </template>
 
 <script setup>
@@ -24,8 +33,16 @@ const companiesList = ref([]);
 const criteria = {
   "groups[]": ["company:details"],
 };
-const campaignsList = ref([]);
-
+const newslettersList = ref([]);
+const groupBy = ref([{ key: "name", order: "asc" }]);
+const headers = ref([
+  {
+    align: "start",
+    sortable: false,
+  },
+  { title: "newsletter", key: "name" },
+  { title: "id", key: "@id" },
+]);
 async function getCampaignsList() {
   try {
     companiesList.value = await $apiSamarkand.getAllCompanies(criteria);
@@ -41,15 +58,16 @@ async function getCampaignsList() {
             getIdFromIri(campaign)
           );
 
-          campaignsList.value.push({
+          newslettersList.value.push({
             name: data["name"],
             id: getIdFromIri(data["@id"]),
+            // : id
             newsletters: data["newsletters"],
           });
         });
         console.log(
           "🚀 ~ company.campaigns.forEach ~ campaignsList.value:",
-          campaignsList.value
+          newslettersList.value
         );
       }
     });
