@@ -42,14 +42,14 @@
     </nuxt-link>
     <span class="h-1/6 flex justify-between pt-4 border-t border-gray-300">
       <!-- link to dell page -->
-      <Ubutton
+      <linkBtn
         _label="supprimer"
         _borderColor="border-red-600"
         _bgHover="hover:bg-red-700"
         :_path="deletePath"
       />
       <!-- link to modify page -->
-      <Ubutton
+      <linkBtn
         _label="modifier"
         _borderColor="border-validation-success"
         :_path="updatePath"
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import Ubutton from "./linkBtn.vue";
+import linkBtn from "./linkBtn.vue";
 import { getIdFromIri } from "@/composables/utils";
 
 const newsletters = ref(0);

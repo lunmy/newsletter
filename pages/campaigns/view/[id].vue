@@ -1,92 +1,79 @@
 <template>
   <h1 class="p-4 text-2xl font-bold text-center">Campaigns</h1>
   <v-data-table
-    :group-by="groupBy"
+    v-model:expanded="expanded"
     :headers="headers"
-    :items="newslettersList"
+    :items="campaignsList"
     item-value="name"
+    expand-on-click
   >
-    <template v-slot:group="{ item, columns, toggleGroup, isGroupOpen }">
-      <tr>
-        <td :colspan="columns.length">
-          <VBtn
-            elevation="1"
-            rounded="l"
-            size="regular"
-            @click="toggleGroup(item)"
-            :icon="isGroupOpen(item) ? '$expand' : '$next'"
-            >{{ item.value }}
-          </VBtn>
+    <!-- slot to access principal row-->
+    <template v-slot:item.name="{ item }">
+      <td class="font-bold">{{ item.name }}</td>
+    </template>
+    <template v-slot:expanded-row="{ columns, item }">
+      <!-- todo ?? insert data-table to display header and allow order by value in header ?? -->
+      <!-- slot to access extended row -->
+      <tr v-if="item.newsletters.length !== 0" v-for="news in item.newsletters">
+        <td x :colspan="columns.length" class="flex justify-between">
+          <a href="#" class="pl-10 inline-block">{{ news["name"] }}</a>
+          <linkBtn
+            class="mr-10 h-min my-auto"
+            _label="modifier"
+            _borderColor="border-validation-success"
+            :_path="updatePath"
+          />
         </td>
+      </tr>
+      <tr v-else>
+        <td>Empty</td>
       </tr>
     </template>
   </v-data-table>
 </template>
 
 <script setup>
-const { $apiSamarkand } = useNuxtApp();
 import { getIdFromIri } from "@/composables/utils";
+import linkBtn from "../components/linkBtn.vue";
+const { $apiSamarkand } = useNuxtApp();
 const route = useRoute();
 
-const companiesList = ref([]);
-const criteria = {
-  "groups[]": ["company:details"],
-};
-const newslettersList = ref([]);
-const groupBy = ref([{ key: "nameCampaign", order: "asc" }]);
+const updatePath = ref("");
+const campaignsList = ref([]);
+const expanded = ref([]);
 const headers = ref([
-  // { title: "campaign", key: "nameCampaign" },
-  { title: "newsletter", key: "nameNews" },
   {
-    align: "center",
+    title: "Name:",
+    key: "name",
+    align: "left",
     sortable: true,
   },
+  // todo implement when date will be accessible
+  // {
+  //   title: "date:",
+  //   key: "newsletters['name']", // put key of date here
+  //   align: "left",
+  //   sortable: true,
+  // },
 ]);
-/**
- * Asynchronous function to fetch all newsletters for a specific company and group them by campaign.
- *
- * Retrieves all companies based on a set criteria, then iterates over each company to find the one matching the current page's ID.
- * For each campaign of the selected company, fetches campaign data and its associated newsletters.
- * Populates the newslettersList with the retrieved data, including newsletter ID, name, associated campaign name, and campaign ID.
- * If a campaign has no newsletters, a default entry with 'VIDE' as the newsletter name is added to newslettersList.
- */
+
 async function getCampaignsList() {
   try {
-    // todo fetch all campaigns instead of all compagniesData
-    companiesList.value = await $apiSamarkand.getAllCompanies(criteria);
-    // for each company
-    companiesList.value.forEach(async (company) => {
+    const criteria = {
+      "groups[]": ["campaign:read", "newsletter:read"],
+    };
+
+    const tempData = await $apiSamarkand.getAllCampaigns(criteria);
+
+    // for each campaign
+    tempData.forEach(async (campaign) => {
       const compID = route.params.id;
-      //   if company id == id of this page
-      if (compID === getIdFromIri(company["@id"])) {
-        // for each campaigns
-        company.campaigns.forEach(async (campaign) => {
-          // fetch data of the campaign
-          const campaigns = await $apiSamarkand.getOneCampaign(
-            getIdFromIri(campaign)
-          );
-          if (campaigns["newsletters"].length > 0) {
-            await campaigns["newsletters"].forEach(async (newsletter) => {
-              newsletter = await $apiSamarkand.getOneNewsletter(
-                getIdFromIri(newsletter)
-              );
-              newslettersList.value.push({
-                idNews: `${getIdFromIri(newsletter["@id"])}`,
-                nameNews: `${newsletter["name"]}`,
-                nameCampaign: `${newsletter["campaign"]["name"]}`,
-                idcampaign: `${getIdFromIri(newsletter["campaign"]["@id"])}`,
-              });
-            });
-          } else {
-            newslettersList.value.push({
-              idNews: ``,
-              nameNews: `VIDE`,
-              nameCampaign: `${campaigns["name"]}`,
-              idcampaign: `${getIdFromIri(campaigns["@id"])}`,
-            });
-          }
-        });
+      // if id of the company is in the campaign data
+      if (compID === getIdFromIri(campaign["company"])) {
+        campaignsList.value.push(campaign);
       }
+      updatePath.value = "/company/update/" + getIdFromIri(campaign["@id"]);
+      //todo: else → get all list if super admin
     });
   } catch (error) {
     console.log(error.status);
