@@ -6,12 +6,16 @@
     :items="newslettersList"
     item-value="name"
   >
-    <template v-slot:group-header="{ item, columns, toggleGroup, isGroupOpen }">
+    <template v-slot:group="{ item, columns, toggleGroup, isGroupOpen }">
       <tr>
-        <td :colspan="columns.length" class="color-blue-500">
-          <!-- :icon="isGroupOpen(item) ? '$expand' : '$next'" -->
-          <VBtn elevation="0" @click="toggleGroup(item)"
-            ><span class="normal-case font-semibold">{{ item.value }}</span>
+        <td :colspan="columns.length">
+          <VBtn
+            elevation="1"
+            rounded="l"
+            size="regular"
+            @click="toggleGroup(item)"
+            :icon="isGroupOpen(item) ? '$expand' : '$next'"
+            >{{ item.value }}
           </VBtn>
         </td>
       </tr>
@@ -31,11 +35,12 @@ const criteria = {
 const newslettersList = ref([]);
 const groupBy = ref([{ key: "nameCampaign", order: "asc" }]);
 const headers = ref([
+  // { title: "campaign", key: "nameCampaign" },
+  { title: "newsletter", key: "nameNews" },
   {
     align: "center",
-    sortable: false,
+    sortable: true,
   },
-  { title: "newsletter", key: "nameNews" },
 ]);
 /**
  * Asynchronous function to fetch all newsletters for a specific company and group them by campaign.
