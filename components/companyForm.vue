@@ -11,6 +11,7 @@
         <div class="animate-pulse bg-gray-300 h-10 w-full rounded-lg"></div>
       </div>
 
+      <!-- form -->
       <v-form v-else ref="form">
         <v-text-field
           label="name"

@@ -1,5 +1,20 @@
 <template>
+  <!-- loader -->
   <div
+    v-if="loading"
+    class="p-4 mb-10 w-64 h-80 border-sm rounded-lg shadow-lg d-flex flex-col"
+  >
+    <v-skeleton-loader
+      class="mx-auto w-64 h-80 rounded-lg"
+      elevation="8"
+      type="text, image, list-item-two-line, button, button"
+    >
+    </v-skeleton-loader>
+  </div>
+
+  <!-- card -->
+  <div
+    v-else
     class="p-4 mb-10 w-64 h-80 border-sm rounded-lg shadow-lg d-flex flex-col"
   >
     <nuxt-link class="h-5/6" :to="campaignPath">
@@ -53,6 +68,7 @@ const deletePath = ref("");
 const campaignPath = ref("");
 //list of campaigns: [{idCampaign: [idNewsletters, ...]}, ...]
 const campaignList = ref([]);
+const loading = ref(true);
 const props = defineProps({
   company: Object,
 });
@@ -74,5 +90,6 @@ onMounted(() => {
       campaignList.value.push(campaignNews);
     });
   }
+  loading.value = false;
 });
 </script>
