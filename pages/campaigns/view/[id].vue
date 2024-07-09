@@ -77,7 +77,7 @@ async function getCampaignsList() {
     // for each campaign
     tempData.forEach(async (campaign) => {
       const compID = route.params.id;
-      // if id of the company is in the campaign data
+      // if id of the companyID is in the campaigns data
       if (compID === getIdFromIri(campaign["company"])) {
         campaignsList.value.push(campaign);
       }

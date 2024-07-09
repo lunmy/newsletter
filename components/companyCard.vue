@@ -2,21 +2,18 @@
   <!-- loader -->
   <div
     v-if="loading"
-    class="p-4 mb-10 w-64 h-80 border-sm rounded-lg shadow-lg d-flex flex-col"
-  >
+    class="p-4 mb-10 w-64 h-80 border-sm rounded-lg shadow-lg d-flex flex-col">
     <v-skeleton-loader
       class="mx-auto w-64 h-80 rounded-lg"
       elevation="8"
-      type="text, image, list-item-two-line, button, button"
-    >
+      type="text, image, list-item-two-line, button, button">
     </v-skeleton-loader>
   </div>
 
   <!-- card -->
   <div
     v-else
-    class="p-4 mb-10 w-64 h-80 border-sm rounded-lg shadow-lg d-flex flex-col"
-  >
+    class="p-4 mb-10 w-64 h-80 border-sm rounded-lg shadow-lg d-flex flex-col">
     <nuxt-link class="h-5/6" :to="campaignPath">
       <p class="h-1/5 text-center border-b border-gray-300">
         {{ company.name }}
@@ -26,8 +23,7 @@
         v-if="company.images && company.images.length > 0"
         class="h-2/5 mx-auto"
         :src="company.images"
-        alt="logo"
-      />
+        alt="logo" />
       <span class="h-2/5">
         <!-- NUMBERS OF CAMPAIGNS -->
         <p class="mt-4 text-center">
@@ -46,14 +42,12 @@
         _label="supprimer"
         _borderColor="border-red-600"
         _bgHover="hover:bg-red-700"
-        :_path="deletePath"
-      />
+        :_path="deletePath" />
       <!-- link to modify page -->
       <linkBtn
         _label="modifier"
         _borderColor="border-validation-success"
-        :_path="updatePath"
-      />
+        :_path="updatePath" />
     </span>
   </div>
 </template>
@@ -66,7 +60,7 @@ const newsletters = ref(0);
 const updatePath = ref("");
 const deletePath = ref("");
 const campaignPath = ref("");
-//list of campaigns: [{idCampaign: [idNewsletters, ...]}, ...]
+
 const campaignList = ref([]);
 const loading = ref(true);
 const props = defineProps({
@@ -75,9 +69,11 @@ const props = defineProps({
 
 onMounted(() => {
   const companyId = getIdFromIri(props.company["@id"]);
+
   campaignPath.value = "/campaigns/view/" + companyId;
   deletePath.value = "/company/delete/" + companyId;
   updatePath.value = "/company/update/" + companyId;
+
   if (props.company.campaigns && props.company.campaigns.length > 0) {
     props.company.campaigns.forEach((campaign) => {
       newsletters.value += campaign.newsletters.length;
