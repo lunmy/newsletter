@@ -6,6 +6,7 @@
     :items="campaignsList"
     item-value="name"
     expand-on-click
+    show-expand
     :loading="loading">
     <!-- loader template -->
     <template v-slot:loading>
@@ -16,7 +17,7 @@
     </template>
     <!-- slot to access principal row-->
     <template v-slot:item.name="{ item }">
-      <td class="font-bold">
+      <td class="font-semibold">
         {{ item.name }} ({{ item["newsletters"].length }})
       </td>
     </template>
@@ -26,9 +27,12 @@
       <v-data-table
         :items="item['newsletters']"
         :headers="subHeaders"
-        class="pl-10">
+        hide-default-footer
+        class="pl-10"
+        items-per-page="-1">
         <template v-slot:item.name="{ item }">
           <NuxtLink :to="'/newsletters/view/' + getIdFromIri(item['@id'])">
+            <v-icon icon="mdi-arrow-top-right" color="grey"></v-icon>
             {{ item.name }}
           </NuxtLink>
         </template>
@@ -50,19 +54,22 @@ const headers = ref([
   {
     title: "Name:",
     key: "name",
+    value: "name",
     align: "left",
     sortable: true,
   },
 ]);
 const subHeaders = ref([
   {
-    title: "Name",
+    title: "Newsletter:",
     key: "name",
+    value: "name",
   },
   // todo implement when date will be accessible
   {
     title: "Date",
     key: "@type", // date here
+    value: "@type",
   },
 ]);
 
