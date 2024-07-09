@@ -144,6 +144,9 @@ export default ({ apiFetch }) => ({
     return datas;
   },
 
+  // async getOneCompanyCampaigns(idComp, criteria) {
+  //   const xhr = await apiFetch.raw('/c')
+  // }
   /**
    * Retrieves all newsletters based on the provided criteria.
    *

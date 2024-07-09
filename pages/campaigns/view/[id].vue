@@ -32,9 +32,13 @@
         items-per-page="-1">
         <template v-slot:item.name="{ item }">
           <NuxtLink :to="'/newsletters/view/' + getIdFromIri(item['@id'])">
-            <v-icon icon="mdi-arrow-top-right" color="grey"></v-icon>
-            {{ item.name }}
+            <v-icon icon="mdi-arrow-top-right" color="grey">{{
+              item.name.toUpperCase
+            }}</v-icon>
           </NuxtLink>
+        </template>
+        <template v-slot:item.createdAt="{ item }">
+          {{ $moment(item.createdAt).format("DD/MM/YYYY") }}
         </template>
       </v-data-table>
     </template>
@@ -62,34 +66,30 @@ const headers = ref([
 const subHeaders = ref([
   {
     title: "Newsletter:",
-    key: "name",
+    key: "company['newsletters']['name']",
     value: "name",
   },
-  // todo implement when date will be accessible
+
   {
     title: "Date",
-    key: "@type", // date here
-    value: "@type",
+    key: "company['newsletters']['createdAt']", // date here
+    value: "createdAt",
   },
 ]);
 
 async function getCampaignsList() {
   try {
     const criteria = {
-      "groups[]": ["campaign:read", "newsletter:read"],
+      company: `${route.params.id}`,
+      "groups[]": ["campaign:read", "newsletter-info", "timestampable:read"],
     };
 
     const tempData = await $apiSamarkand.getAllCampaigns(criteria);
 
     // for each campaign
     tempData.forEach(async (campaign) => {
-      const compID = route.params.id;
-      // if id of the companyID is in the campaigns data
-      if (compID === getIdFromIri(campaign["company"])) {
-        campaignsList.value.push(campaign);
-      }
+      campaignsList.value.push(campaign);
       updatePath.value = "/company/update/" + getIdFromIri(campaign["@id"]);
-      //todo: else → get all list if super admin
     });
     loading.value = false;
   } catch (error) {
