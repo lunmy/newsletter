@@ -6,38 +6,43 @@
     :items="campaignsList"
     item-value="name"
     expand-on-click
-  >
+    :loading="loading">
+    <!-- loader template -->
+    <template v-slot:loading>
+      <span v-for="i in [...Array(5).keys()]">
+        <v-skeleton-loader type="text" width="400"></v-skeleton-loader>
+        <v-skeleton-loader type="divider"></v-skeleton-loader>
+      </span>
+    </template>
     <!-- slot to access principal row-->
     <template v-slot:item.name="{ item }">
-      <td class="font-bold">{{ item.name }}</td>
+      <td class="font-bold">
+        {{ item.name }} ({{ item["newsletters"].length }})
+      </td>
     </template>
-    <template v-slot:expanded-row="{ columns, item }">
-      <!-- todo ?? insert data-table to display header and allow order by value in header ?? -->
-      <!-- slot to access extended row -->
-      <tr v-if="item.newsletters.length !== 0" v-for="news in item.newsletters">
-        <td x :colspan="columns.length" class="flex justify-between">
-          <a href="#" class="pl-10 inline-block">{{ news["name"] }}</a>
-          <linkBtn
-            class="mr-10 h-min my-auto"
-            _label="modifier"
-            _borderColor="border-validation-success"
-            :_path="updatePath"
-          />
-        </td>
-      </tr>
-      <tr v-else>
-        <td>Empty</td>
-      </tr>
+    <!-- slot to access extended row -->
+    <template v-slot:expanded-row="{ item }">
+      <!-- sub table -->
+      <v-data-table
+        :items="item['newsletters']"
+        :headers="subHeaders"
+        class="pl-10">
+        <template v-slot:item.name="{ item }">
+          <NuxtLink :to="'/newsletters/view/' + getIdFromIri(item['@id'])">
+            {{ item.name }}
+          </NuxtLink>
+        </template>
+      </v-data-table>
     </template>
   </v-data-table>
 </template>
 
 <script setup>
 import { getIdFromIri } from "@/composables/utils";
-import linkBtn from "../components/linkBtn.vue";
 const { $apiSamarkand } = useNuxtApp();
 const route = useRoute();
 
+const loading = ref(true);
 const updatePath = ref("");
 const campaignsList = ref([]);
 const expanded = ref([]);
@@ -48,13 +53,17 @@ const headers = ref([
     align: "left",
     sortable: true,
   },
+]);
+const subHeaders = ref([
+  {
+    title: "Name",
+    key: "name",
+  },
   // todo implement when date will be accessible
-  // {
-  //   title: "date:",
-  //   key: "newsletters['name']", // put key of date here
-  //   align: "left",
-  //   sortable: true,
-  // },
+  {
+    title: "Date",
+    key: "@type", // date here
+  },
 ]);
 
 async function getCampaignsList() {
@@ -75,6 +84,7 @@ async function getCampaignsList() {
       updatePath.value = "/company/update/" + getIdFromIri(campaign["@id"]);
       //todo: else → get all list if super admin
     });
+    loading.value = false;
   } catch (error) {
     console.log(error.status);
     console.log(error);
