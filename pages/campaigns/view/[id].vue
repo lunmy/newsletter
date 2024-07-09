@@ -49,6 +49,7 @@
 import { getIdFromIri } from "@/composables/utils";
 const { $apiSamarkand } = useNuxtApp();
 const route = useRoute();
+const { $moment } = useNuxtApp();
 
 const loading = ref(true);
 const updatePath = ref("");
@@ -66,13 +67,13 @@ const headers = ref([
 const subHeaders = ref([
   {
     title: "Newsletter:",
-    key: "company['newsletters']['name']",
+    key: "'name'",
     value: "name",
   },
 
   {
     title: "Date",
-    key: "company['newsletters']['createdAt']", // date here
+    key: "'createdAt'", // date here
     value: "createdAt",
   },
 ]);
