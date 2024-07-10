@@ -1,6 +1,4 @@
 <template>
-  <h1 class="p-4 text-2xl font-bold text-center">Campaigns</h1>
-
   <v-data-table
     v-model:expanded="expanded"
     :headers="headers"
@@ -13,6 +11,16 @@
     page-text=""
     :items-per-page-options="items_per_page"
     :loading="loading">
+    <template v-slot:top>
+      <v-toolbar flat>
+        <v-toolbar-title class="ml-8">Campaigns</v-toolbar-title>
+        <v-icon
+          icon="mdi-plus-circle-outline"
+          size="x-large"
+          color="green"
+          class="mr-8"></v-icon>
+      </v-toolbar>
+    </template>
     <!-- loader  -->
     <template v-slot:loading>
       <span v-for="i in [...Array(5).keys()]">
@@ -23,18 +31,18 @@
 
     <!-- header  -->
     <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
-      <tr>
+      <tr class="border-y-1 border-gray-200 bg-slate-100">
         <template v-for="column in columns" :key="column.key">
           <td>
             <span class="mr-2 flex">
-              <template v-if="isSorted(column)">
-                <v-icon :icon="getSortIcon(column)"></v-icon>
-              </template>
               <p
-                class="my-auto mr-2 cursor-pointer"
+                class="my-auto mx-2 cursor-pointer"
                 @click="() => toggleSort(column)">
                 {{ column.title }}
               </p>
+              <template v-if="isSorted(column)">
+                <v-icon :icon="getSortIcon(column)"></v-icon>
+              </template>
               <!-- name column -->
               <span v-if="column.key == 'name'" class="flex">
                 <v-icon
@@ -63,38 +71,37 @@
         </template>
       </tr>
     </template>
-    <!-- items: campaings  -->
+    <!-- items: 'campaings'  -->
     <template v-slot:item.name="{ item }">
       <td class="font-semibold">
-        {{ item.name }} ({{ item["newsletters"].length }})
+        - {{ item.name }} ({{ item["newsletters"].length }})
       </td>
     </template>
     <!-- EXPANDED ROW -->
     <template v-slot:expanded-row="{ item }">
-      <!-- sub table -->
+      <!-- sub: table -->
       <v-data-table
         :items="item['newsletters']"
         :headers="subHeaders"
         :search="searchNewsText"
-        class="pl-10"
         hide-default-footer
         items-per-page="-1">
-        <!-- header  -->
+        <!-- sub: header  -->
         <template
           v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
-          <tr>
+          <tr class="border-y-1 border-blue-200 bg-slate-100">
             <template v-for="column in columns" :key="column.key">
               <td>
                 <span class="mr-2 flex">
-                  <template v-if="isSorted(column)">
-                    <v-icon :icon="getSortIcon(column)"></v-icon>
-                  </template>
                   <p
-                    class="my-auto mr-2 cursor-pointer"
+                    class="pl-8 my-auto mx-2 cursor-pointer font-semibold"
                     @click="() => toggleSort(column)">
                     {{ column.title }}
                   </p>
-                  <!-- name column -->
+                  <template v-if="isSorted(column)">
+                    <v-icon :icon="getSortIcon(column)"></v-icon>
+                  </template>
+                  <!-- sub: header label -->
                   <span v-if="column.key == 'name'" class="flex">
                     <v-icon
                       icon="mdi-magnify"
@@ -102,7 +109,7 @@
                       start
                       size="large"
                       class="my-auto cursor-pointer"></v-icon>
-                    <!-- search campaign field -->
+                    <!-- sub: search newsletter field -->
                     <v-text-field
                       v-if="searchNews"
                       v-model="searchNewsText"
@@ -121,13 +128,15 @@
             </template>
           </tr>
         </template>
-        <!-- items: newsletters name -->
+        <!-- items: 'newsletters name' -->
         <template v-slot:item.name="{ item }">
-          <NuxtLink :to="'/newsletters/view/' + getIdFromIri(item['@id'])">
-            {{ item.name.toUpperCase() }}
+          <NuxtLink
+            :to="'/newsletters/view/' + getIdFromIri(item['@id'])"
+            class="pl-16">
+            -{{ item.name.toUpperCase() }}
           </NuxtLink>
         </template>
-        <!-- items: newsletters createdAt -->
+        <!-- items: 'newsletters createdAt' -->
         <template v-slot:item.createdAt="{ item }">
           {{ $moment(item.createdAt).format("DD/MM/YYYY") }}
         </template>
