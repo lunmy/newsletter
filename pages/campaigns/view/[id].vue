@@ -9,6 +9,8 @@
     item-value="name"
     expand-on-click
     show-expand
+    show-current-page
+    page-text=""
     :items-per-page-options="items_per_page"
     :loading="loading">
     <!-- loader  -->
@@ -45,6 +47,8 @@
                 <v-text-field
                   v-if="searchCamp"
                   v-model="searchCampText"
+                  autofocus
+                  clearable
                   @blur="toggleSearchCamp()"
                   update:focused="true"
                   label="Search"
@@ -102,6 +106,8 @@
                     <v-text-field
                       v-if="searchNews"
                       v-model="searchNewsText"
+                      autofocus
+                      clearable
                       @blur="toggleSearchNews()"
                       label="Search"
                       variant="outlined"
