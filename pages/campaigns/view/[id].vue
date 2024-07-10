@@ -7,6 +7,7 @@
     item-value="name"
     expand-on-click
     show-expand
+    :items-per-page-options="items_per_page"
     :loading="loading">
     <!-- loader template -->
     <template v-slot:loading>
@@ -27,14 +28,33 @@
       <v-data-table
         :items="item['newsletters']"
         :headers="subHeaders"
-        hide-default-footer
         class="pl-10"
+        hide-default-footer
         items-per-page="-1">
+        <template
+          v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
+          <tr>
+            <template v-for="column in columns" :key="column.key">
+              <td>
+                <span
+                  class="mr-2 cursor-pointer"
+                  @click="() => toggleSort(column)">
+                  ==> ==> {{ column.title }}</span
+                >
+                <template v-if="isSorted(column)">
+                  <v-icon :icon="getSortIcon(column)"></v-icon>
+                </template>
+                <v-icon
+                  v-if="column.removable"
+                  icon="$close"
+                  @click="() => remove(column.key)"></v-icon>
+              </td>
+            </template>
+          </tr>
+        </template>
         <template v-slot:item.name="{ item }">
           <NuxtLink :to="'/newsletters/view/' + getIdFromIri(item['@id'])">
-            <v-icon icon="mdi-arrow-top-right" color="grey">{{
-              item.name.toUpperCase
-            }}</v-icon>
+            {{ item.name.toUpperCase() }}
           </NuxtLink>
         </template>
         <template v-slot:item.createdAt="{ item }">
@@ -55,6 +75,7 @@ const loading = ref(true);
 const updatePath = ref("");
 const campaignsList = ref([]);
 const expanded = ref([]);
+const items_per_page = ref([1, 5, 10, 15, 20, -1]);
 const headers = ref([
   {
     title: "Name:",
@@ -67,13 +88,13 @@ const headers = ref([
 const subHeaders = ref([
   {
     title: "Newsletter:",
-    key: "'name'",
+    key: "name",
     value: "name",
   },
 
   {
-    title: "Date",
-    key: "'createdAt'", // date here
+    title: "Date:",
+    key: "createdAt", // date here
     value: "createdAt",
   },
 ]);
