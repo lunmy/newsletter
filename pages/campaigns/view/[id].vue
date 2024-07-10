@@ -37,9 +37,9 @@
             <template v-for="column in columns" :key="column.key">
               <td>
                 <span
-                  class="mr-2 cursor-pointer"
-                  @click="() => toggleSort(column)">
-                  ==> ==> {{ column.title }}</span
+                  class="mr-2 cursor-pointer font-semibold"
+                  @click="() => toggleSort(column)"
+                  >{{ column.title }}</span
                 >
                 <template v-if="isSorted(column)">
                   <v-icon :icon="getSortIcon(column)"></v-icon>
