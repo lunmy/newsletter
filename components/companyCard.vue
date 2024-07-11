@@ -27,7 +27,7 @@
       <span class="h-2/5">
         <!-- NUMBERS OF CAMPAIGNS -->
         <p class="mt-4 text-center">
-          campaigns: {{ company.campaigns ? company.campaigns.length : "X" }}
+          campagnes: {{ company.campaigns ? company.campaigns.length : "X" }}
         </p>
         <!-- NUMBERS OF NEWSLETTERS -->
         <p class="mb-4 mt-2 text-center">

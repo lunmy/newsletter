@@ -11,9 +11,12 @@
     page-text=""
     :items-per-page-options="items_per_page"
     :loading="loading">
+    <!-- Title -->
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title class="ml-8">Campaigns</v-toolbar-title>
+        <v-toolbar-title class="ml-8"
+          >Campagnes: {{ compName }}</v-toolbar-title
+        >
         <v-icon
           icon="mdi-plus-circle-outline"
           size="x-large"
@@ -157,12 +160,13 @@ const searchNewsText = ref("");
 const searchCamp = ref(false);
 const searchNews = ref(false);
 const updatePath = ref("");
+const compName = ref("");
 const campaignsList = ref([]);
 const expanded = ref([]);
 const items_per_page = ref([1, 5, 10, 15, 20, -1]);
 const headers = ref([
   {
-    title: "Name:",
+    title: "Nom:",
     key: "name",
     value: "name",
     align: "left",
@@ -189,8 +193,13 @@ function toggleSearchCamp() {
 function toggleSearchNews() {
   searchNews.value = !searchNews.value;
 }
+async function getCompany() {
+  const data = await $apiSamarkand.getOneCompany(route.params.id);
+  compName.value = data["name"];
+}
 async function getCampaignsList() {
   try {
+    getCompany();
     const criteria = {
       company: `${route.params.id}`,
       "groups[]": ["campaign:read", "newsletter-info", "timestampable:read"],

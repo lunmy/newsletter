@@ -16,10 +16,10 @@
               <v-list-item-title>Accueil</v-list-item-title>
             </v-list-item>
             <v-list-item link to="/">
-              <v-list-item-title>login</v-list-item-title>
+              <v-list-item-title>connexion</v-list-item-title>
             </v-list-item>
             <v-list-item v-if="display" @click="logout">
-              <v-list-item-title>logout</v-list-item-title>
+              <v-list-item-title>déconnexion</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
