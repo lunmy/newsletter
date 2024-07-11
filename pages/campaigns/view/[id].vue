@@ -17,14 +17,15 @@
         <v-toolbar-title class="ml-8"
           >Campagnes: {{ compName }}</v-toolbar-title
         >
-
-        <NuxtLink :to="'/campaigns/add/' + route.params.id">
-          <v-icon
-            icon="mdi-plus-circle-outline"
-            size="x-large"
-            color="green"
-            class="mr-8"></v-icon>
-        </NuxtLink>
+        <!-- btn add campaign -->
+        <v-btn
+          variant="outlined"
+          class="mr-8"
+          append-icon="mdi-plus-circle-outline"
+          @click="nemCampaign">
+          <span class="font-semibold tex-center">ajout</span>
+        </v-btn>
+        <!-- </NuxtLink> -->
       </v-toolbar>
     </template>
     <!-- loader  -->
@@ -235,6 +236,9 @@ async function getCampaignsList() {
     console.log(error.status);
     console.log(error);
   }
+}
+function nemCampaign() {
+  navigateTo("/campaigns/add/" + route.params.id);
 }
 getCampaignsList();
 </script>
