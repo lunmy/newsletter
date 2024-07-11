@@ -191,4 +191,11 @@ export default ({ apiFetch }) => ({
       return xhr._data;
     }
   },
+
+  async createCampaign(datas) {
+    const xhr = await apiFetch.raw(`/campaigns`, {
+      body: datas,
+      method: "POST",
+    });
+  },
 });

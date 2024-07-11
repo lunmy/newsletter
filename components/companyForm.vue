@@ -2,11 +2,10 @@
   <v-container class="fluid">
     <div class="w-2/5 p-10 mx-auto border-sm rounded-lg">
       <!-- loader -->
-      <div v-if="company == []" class="w-full">
+      <div v-if="props.company == []" class="w-full">
         <div class="animate-pulse bg-gray-300 h-14 w-full rounded-lg"></div>
         <div
-          class="animate-pulse my-6 bg-gray-300 h-14 w-full rounded-lg"
-        ></div>
+          class="animate-pulse my-6 bg-gray-300 h-14 w-full rounded-lg"></div>
         <div class="animate-pulse my-6 mx-auto bg-gray-300 h-60 w-60"></div>
         <div class="animate-pulse bg-gray-300 h-10 w-full rounded-lg"></div>
       </div>
@@ -17,9 +16,8 @@
           label="name"
           variant="solo-filled"
           rounded="lg"
-          v-model="company.name"
-          :rules="[textRule]"
-        ></v-text-field>
+          v-model="props.company.name"
+          :rules="[textRule]"></v-text-field>
         <v-file-input
           prepend-inner-icon="mdi-paperclip"
           :prepend-icon="null"
@@ -27,8 +25,7 @@
           v-model="newImg"
           label="image"
           variant="solo-filled"
-          rounded="lg"
-        ></v-file-input>
+          rounded="lg"></v-file-input>
 
         <img class="w-60 mx-auto" :src="image" alt="" />
 
@@ -39,8 +36,7 @@
           block
           @click="submit"
           rounded="lg"
-          :loading="props.loading"
-        >
+          :loading="props.loading">
           <span class="text-0 font-semibold text-base"> update </span>
         </v-btn>
       </v-form>

@@ -2,15 +2,14 @@
   <h1 class="p-4 text-2xl font-bold text-center">Update</h1>
   <p
     v-if="modifictaion"
-    class="py-4 text-center text-xl font-semibold text-green-500"
-  >
+    class="py-4 text-center text-xl font-semibold text-green-500">
     Modification réussi
   </p>
   <companyForm :company="company" :loading="loading" @submit="updateCompany" />
 </template>
 
 <script setup>
-import companyForm from "../components/companyForm.vue";
+import companyForm from "~/components/companyForm.vue";
 import { getIdFromIri } from "@/composables/utils";
 
 const { $apiSamarkand } = useNuxtApp();

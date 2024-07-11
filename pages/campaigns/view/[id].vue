@@ -17,11 +17,14 @@
         <v-toolbar-title class="ml-8"
           >Campagnes: {{ compName }}</v-toolbar-title
         >
-        <v-icon
-          icon="mdi-plus-circle-outline"
-          size="x-large"
-          color="green"
-          class="mr-8"></v-icon>
+
+        <NuxtLink :to="'/campaigns/add/' + route.params.id">
+          <v-icon
+            icon="mdi-plus-circle-outline"
+            size="x-large"
+            color="green"
+            class="mr-8"></v-icon>
+        </NuxtLink>
       </v-toolbar>
     </template>
     <!-- loader  -->
@@ -49,15 +52,17 @@
               <!-- name column -->
               <span v-if="column.key == 'name'" class="flex">
                 <v-icon
+                  v-if="!toggleCamp"
                   icon="mdi-magnify"
                   @click="toggleSearchCamp()"
                   start
                   size="large"
-                  class="my-auto cursor-pointer"></v-icon>
+                  class="ml-2 my-auto cursor-pointer"></v-icon>
                 <!-- search campaign field -->
                 <v-text-field
-                  v-if="searchCamp"
+                  v-if="toggleCamp"
                   v-model="searchCampText"
+                  prepend-inner-icon="mdi-magnify"
                   autofocus
                   clearable
                   @blur="toggleSearchCamp()"
@@ -76,7 +81,7 @@
     </template>
     <!-- items: 'campaings'  -->
     <template v-slot:item.name="{ item }">
-      <td class="font-semibold">
+      <td class="font-semibold pl-8">
         - {{ item.name }} ({{ item["newsletters"].length }})
       </td>
     </template>
@@ -108,6 +113,7 @@
                   <span v-if="column.key == 'name'" class="flex">
                     <v-icon
                       icon="mdi-magnify"
+                      v-if="!searchNews"
                       @click="toggleSearchNews()"
                       start
                       size="large"
@@ -115,6 +121,7 @@
                     <!-- sub: search newsletter field -->
                     <v-text-field
                       v-if="searchNews"
+                      prepend-inner-icon="mdi-magnify"
                       v-model="searchNewsText"
                       autofocus
                       clearable
@@ -157,7 +164,7 @@ const { $moment } = useNuxtApp();
 const loading = ref(true);
 const searchCampText = ref("");
 const searchNewsText = ref("");
-const searchCamp = ref(false);
+const toggleCamp = ref(false);
 const searchNews = ref(false);
 const updatePath = ref("");
 const compName = ref("");
@@ -188,7 +195,7 @@ const subHeaders = ref([
 ]);
 
 function toggleSearchCamp() {
-  searchCamp.value = !searchCamp.value;
+  toggleCamp.value = !toggleCamp.value;
 }
 function toggleSearchNews() {
   searchNews.value = !searchNews.value;
@@ -197,17 +204,28 @@ async function getCompany() {
   const data = await $apiSamarkand.getOneCompany(route.params.id);
   compName.value = data["name"];
 }
+
+/**
+ * Asynchronously retrieves the list of campaigns.
+ * Filters campaigns by company ID if there is one in route.
+ * Otherwise, retrieves ALL campaigns.
+ */
 async function getCampaignsList() {
   try {
     getCompany();
-    const criteria = {
-      company: `${route.params.id}`,
-      "groups[]": ["campaign:read", "newsletter-info", "timestampable:read"],
-    };
+    let criteria = {};
+    if (route.params.id != "index") {
+      criteria = {
+        company: `${route.params.id}`,
+        "groups[]": ["campaign:read", "newsletter-info", "timestampable:read"],
+      };
+    } else {
+      criteria = {
+        "groups[]": ["campaign:read", "newsletter-info", "timestampable:read"],
+      };
+    }
 
     const tempData = await $apiSamarkand.getAllCampaigns(criteria);
-
-    // for each campaign
     tempData.forEach(async (campaign) => {
       campaignsList.value.push(campaign);
       updatePath.value = "/company/update/" + getIdFromIri(campaign["@id"]);
