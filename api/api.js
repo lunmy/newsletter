@@ -1,52 +1,7 @@
 export default ({ apiFetch }) => ({
-  /**
-   * Retrieves all companies based on the provided criteria.
-   *
-   * @param {Object} criteria - The criteria to filter the companies.
-   * @returns {Array} - An array of companies that match the criteria.
-   */
-  async getAllCompanies(criteria) {
-    const datas = [];
-    let page =
-      criteria === null || criteria.page === undefined ? 1 : criteria.page;
-    let hasNext = true;
-    do {
-      // use raw fetch to catch the status code
-      const xhr = await apiFetch.raw("/companies", {
-        method: "GET",
-        params: { ...criteria, page },
-      });
-      if (xhr.status === 200) {
-        const response = xhr._data;
-        let companies = await response["hydra:member"];
-        companies.forEach((company) => {
-          datas.push(company);
-        });
 
-        if (!response["hydra:view"]["hydra:next"]) {
-          hasNext = false;
-        }
-        page++;
-      }
-    } while (hasNext);
-
-    return datas;
-  },
-
-  /**
-   * Retrieves a single company based on the provided ID.
-   *
-   * @param {number} id - The ID of the company to retrieve.
-   * @returns {Object|null} - The company object if found, or null if not found.
-   */
   async getOneCompany(id) {
-    const xhr = await apiFetch.raw(`/companies/${id}`, {
-      method: "GET",
-    });
-    if (xhr.status === 200) {
-      return await xhr._data;
-    }
-    return null;
+    return await this.getOne('companies', id);
   },
 
   /**
@@ -95,54 +50,74 @@ export default ({ apiFetch }) => ({
     });
   },
 
-  /**
-   * Retrieves a single campaign based on the provided ID.
-   *
-   * @param {number} id - The ID of the campaign to retrieve.
-   * @returns {Object|null} - The campaign object if found, or null if not found.
-   */
-  async getOneCampaign(id) {
-    const xhr = await apiFetch.raw(`/campaigns/${id}`, {
-      method: "GET",
-    });
-    if (xhr.status === 200) {
-      return xhr._data;
-    }
-  },
-
-  /**
-   * Retrieves all campaigns based on the provided criteria.
-   *
-   * @param {Object} criteria - The criteria to filter the campaigns.
-   * @returns {Array} - An array of campaigns that match the criteria.
-   */
+  /*****************************************************
+   *  Campaigns
+   ****************************************************/
   async getAllCampaigns(criteria) {
-    const datas = [];
-    let page =
-      criteria === null || criteria.page === undefined ? 1 : criteria.page;
-    let hasNext = true;
-    do {
-      // use raw fetch to catch the status code
-      const xhr = await apiFetch.raw("/campaigns", {
-        method: "GET",
-        params: { ...criteria, page },
-      });
-      if (xhr.status === 200) {
-        const response = await xhr._data;
-        let campaigns = await response["hydra:member"];
-        campaigns.forEach((campaign) => {
-          datas.push(campaign);
-        });
-
-        if (!response["hydra:view"]["hydra:next"]) {
-          hasNext = false;
-        }
-        page++;
-      }
-    } while (hasNext);
-
-    return datas;
+    return await this.getAll('campaigns', criteria);
   },
+
+  async getOneCampaign(id) {
+    return await this.getOne('campaigns', id);
+  },
+
+  async createCampaign(campaign) {
+    let tmpImages = []
+    if(campaign.images.newImages !== undefined) {
+      tmpImages = structuredClone(toRaw(campaign.images))
+    }
+    delete campaign.images
+    const data = await this.create("campaigns", campaign)
+    await this.addCampaignsImgs(data, tmpImages)
+  },
+
+  async updateCampaign(data) {
+    console.log(data.images)
+    let tmpImages = []
+    if(data.images.newImages !== undefined) {
+      tmpImages = structuredClone(toRaw(data.images))
+      console.log('update', tmpImages)
+    }
+    delete data.images
+    data.company=data.company['@id']
+    console.log('Update campaign ' + data['@id'])
+    const result =  await this.update(data)
+    await this.addCampaignsImgs(data, tmpImages)
+    return result
+  },
+
+  async addCampaignsImgs(campaign, images)
+  {
+    console.log(images)
+    if(images.newImages === undefined || images.newImages === null || images.newImages.length === 0) {
+      return
+    }
+    images.oldImages.map(async (img) => {
+      try{
+        console.log('remove Old img', img)
+        await this.removeImage(img)
+      }
+      catch(e) {
+        console.log(e)
+      }
+    })
+
+
+    images.newImages.map(async (img) => {
+      try{
+        console.log('add new img', img)
+        await this.createImage(campaign, img)
+      }
+      catch(e) {
+        console.log(e)
+      }
+    })
+  },
+
+  async deleteCampaign(campaignId) {
+      return await this.delete(`${campaignId}`)
+  },
+
 
   /**
    * Retrieves all newsletters based on the provided criteria.
@@ -192,10 +167,117 @@ export default ({ apiFetch }) => ({
     }
   },
 
-  async createCampaign(datas) {
-    const xhr = await apiFetch.raw(`/campaigns`, {
-      body: datas,
+  /*****************************************************
+   *  Images
+   ****************************************************/
+  async createImage(data, image) {
+    const form = new FormData();
+    form.append("file", image);
+    form.append('tag', 'desktop')
+
+    return await apiFetch.raw(`${data['@id']}/image`, {
+      body: form,
       method: "POST",
     });
   },
+  async updateImage(data) {
+
+  },
+  async removeImage(data) {
+    return await apiFetch.raw(`${data['@id']}`, {
+      method: "DELETE",
+    });
+  },
+
+  /*****************************************************
+   *  Functions
+   ****************************************************/
+  async getAll(ep, filters) {
+    let page = filters === null || filters.page === undefined ? 1 : filters.page
+    const datas = []
+    let hasNextPage = true
+
+    do {
+      const request = await apiFetch.raw(`${ep}`, {
+        method: "GET",
+        params: {
+          ...filters,
+          page
+        }
+      });
+
+      if (request.status === 200) {
+        if (filters === null) {
+          return request._data['hydra:member']
+        }
+        else if (filters.allObjects) {
+          datas.push(...request._data['hydra:member'])
+        }
+        else {
+          return request._data
+        }
+      }
+      else{
+        hasNextPage = false
+      }
+
+      if (!request._data['hydra:view']['hydra:next']) {
+        hasNextPage = false
+      }
+      page++
+      //hasNextPage = false
+    } while (hasNextPage)
+
+    return datas
+  },
+  async getOne(ep, id, params = null) {
+
+    const xhr = await apiFetch.raw(`/${ep}/${id}`, {
+      method: "GET",
+      params: {
+        ...params,
+      }
+    });
+    if (xhr.status === 200) {
+      return await xhr._data;
+    }
+    return null;
+
+  },
+  async create(ep, data, params = null) {
+    const xhr = await apiFetch.raw(`/${ep}`, {
+      method: "POST",
+      body: data,
+      params: {
+        ...params,
+      }
+    });
+    if (xhr.status === 201) {
+      return await xhr._data;
+    }
+    return null;
+  },
+  async update(data, params = null) {
+    return await apiFetch.raw(`${data['@id']}`, {
+      method: "PATCH",
+      body: data,
+      headers: {
+        "Content-Type": "application/merge-patch+json",
+      },
+      params: {
+        ...params,
+      },
+    });
+  },
+  async delete(id) {
+    const request = await apiFetch.raw(`${id}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/ld+json',
+      },
+    })
+    return request.status === 204
+  },
+
+
 });

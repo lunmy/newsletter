@@ -1,63 +1,69 @@
 <template>
-  <v-sheet
-    class="mt-20 mx-auto p-10 border-primary-0 border-sm rounded-lg"
-    elevation="2"
-    width="600"
-  >
-    <span>
-      <div class="d-flex justify-center">
-        <svg
-          width="110"
-          height="114"
-          viewBox="0 0 110 114"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M28.5 83.4L46.1667 72.4L55 112L63.8333 72.4L81.5 83.4L68.25 65.8L108 57L68.25 48.2L81.5 30.6L63.8333 41.6L55 2L46.1667 41.6L28.5 30.6L41.75 48.2L2 57L28.5 62.8667"
-            stroke="#273B4B"
-            stroke-width="3"
-            stroke-linejoin="round"
-          />
-        </svg>
+  <!-- component -->
+  <div class="h-screen md:flex">
+    <div
+        class="relative overflow-hidden md:flex w-1/2 bg-gradient-to-tr bg-primary-0 justify-around items-center hidden">
+      <div>
+        <h1 class="text-white font-bold text-4xl font-sans">Papillons Blancs de Dunkerque</h1>
+        <p class="text-white mt-1">Création de newsletters</p>
+
       </div>
-      <div class="d-flex justify-center mb-5">
-        <p class="text-red">{{ errorMsg }}</p>
-      </div>
-      <v-form ref="loginForm">
+      <div class="absolute -bottom-32 -left-40 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+      <div class="absolute -bottom-40 -left-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+      <div class="absolute -top-40 -right-0 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+      <div class="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+    </div>
+    <div class="flex md:w-1/2 justify-center py-10 items-center bg-white">
+      <v-form ref="loginForm" class="bg-white w-1/2">
+        <div class="flex justify-center mb-5">
+          <img src="/img/logo.png" alt="logo" class="w-20 h-20 mr-2 inline-block"/>
+        </div>
         <v-text-field
-          v-model="login"
-          label="Login"
-          :rules="[loginRule]"
-          variant="solo"
-          rounded="lg"
-          required
-        ></v-text-field>
+            v-model="login"
+            label="Email"
+            :rules="[textRule, emailRule]"
+            rounded=50
+            prepend-inner-icon="mdi-email"
+            variant="outlined"
+            class="w-full mt-5 rounded-2xl"
+            required
+        />
         <v-text-field
-          type="password"
-          v-model="password"
-          label="Password"
-          :rules="[passwordRule]"
-          variant="solo"
-          rounded="lg"
-          required
-        ></v-text-field>
+            v-model="password"
+            label="Mot de passe"
+            :rules="[textRule]"
+            prepend-inner-icon="mdi-lock"
+            rounded-full
+            variant="outlined"
+            class="w-full mt-5 rounded-2xl"
+            type="password"
+            required
+        />
         <v-btn
-          class="mt-2 bg-secondary"
-          type="button"
-          block
-          @click="checkInput()"
-          rounded="lg"
-          :loading="isloading"
-          ><span class="text-0 font-semibold text-base"> Connect </span></v-btn
+            @click.prevent="submit()"
+            class="block w-full font-semibold mb-2 rounded-2xl"
+            color="primary-0"
+            base-color="secondary-0"
+            :loading="isloading"
         >
+          Connexion
+        </v-btn>
+        <div v-if="errorMessage !== ''"
+             class="text-center text-validation-error mx-4">
+          <span class="text-lg">{{ errorMessage }}</span> <br/>
+        </div>
       </v-form>
-    </span>
-  </v-sheet>
+    </div>
+  </div>
 </template>
 <script setup>
-import { loginRule, passwordRule } from "@/composables/rules";
+import {passwordRule, emailRule } from "@/composables/rules";
 import { useAuthStore } from "~/store/auth";
+
+definePageMeta({
+  layout: 'login'
+})
+
 const { setToken, setUser } = useAuthStore();
 
 const { $authApi } = useNuxtApp();
@@ -65,11 +71,11 @@ const router = useRouter();
 const loginForm = ref(null);
 const isloading = ref(false);
 
-const errorMsg = ref("");
-const login = ref("superadmin@syneidolab.com");
-const password = ref("super_admin");
+const errorMessage = ref("");
+const login = ref("anthony@lunamy.com");
+const password = ref("bT2gSUIr8ifyxo7QyYJZ");
 
-async function checkInput() {
+async function submit() {
   // validate :rules
   const promise = loginForm.value.validate();
   promise.then((success) => {
@@ -83,16 +89,16 @@ async function checkInput() {
           setUser(login.value);
           setToken(data.token);
 
-          navigateTo(`/home`);
+          navigateTo(`/campaigns`);
         })
         .catch((error) => {
           const status = error.response.status;
           switch (status) {
             case 404:
-              errorMsg.value = `Erreur lors de la connection, verifier vos information`;
+              errorMessage.value = `Erreur lors de la connection, verifier vos information`;
               break;
             default:
-              errorMsg.value = "Une erreur est survenue";
+              errorMessage.value = "Une erreur est survenue";
           }
         })
         .finally(() => {

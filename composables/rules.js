@@ -4,21 +4,30 @@ export function loginRule(value) {
   return value.length > 0 || "doit contenir au moins 3 caractères";
 }
 
-export function passwordRule(value) {
-  // use CNIL recomendation
-  // todo put back when the backend will be ready
-  return true;
-  // const regex =
-  //   /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[@&#{(\[\-|_\\)\]=}%?!\/]).{12,}$/;
-  // return (
-  //   regex.test(value) ||
-  //   "doit contenir 12 caractères, 1 minuscule, 1 majuscule, 1chiffre, un caratère special"
-  // );
+export function emailRule(value) {
+  const regex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  return  regex.test(value) || "L'adresse email n'est pas valide !";
 }
 
 export function textRule(value) {
-  return !!value || "Le champ ne doit pas être vide !";
+  return  !!value || 'Le champ ne doit pas être vide !'
 }
+
+export function phoneRule(value) {
+  const regex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/im;
+  return  regex.test(value) || "Le numéro de téléphone n'est pas valide !";
+}
+
+export function passwordRule(value) {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)/;
+
+  if(value.length < 8 ){
+    return "Le mot de passe doit contenir au moins 8 caractères !";
+  }
+
+  return regex.test(value) || "Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial !";
+}
+
 
 export function fileRule(value) {
   if (value === null) {

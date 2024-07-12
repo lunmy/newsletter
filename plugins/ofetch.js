@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 import authOfetch from "@/api/authOfetch";
-import samarkandApi from "@/api/api";
+import emailApi from "@/api/api";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "~/store/auth";
 
@@ -11,7 +11,7 @@ export default defineNuxtPlugin((nuxtApp) => {
    * create ofetch instance for authentificationAPI
    */
   const apiAuth = ofetch.create({
-    baseURL: config.public.NUXT_ENV_API_SAMARKAND,
+    baseURL: config.public.NUXT_ENV_API,
     headers: {
       Accept: "application/ld+json",
       "Content-Type": "application/ld+json",
@@ -21,10 +21,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   /**
    * Create ofetch instance for SamarkandAPI
    */
-  const apiSamarkand = ofetch.create({
-    baseURL: config.public.NUXT_ENV_API_SAMARKAND,
+  const apinewsletterr = ofetch.create({
+    baseURL: config.public.NUXT_ENV_API,
     headers: {
-      Accept: "*/*",
+      "Accept": "*/*",
     },
     /**
      * Handles the request before it is sent, adding the token to the header if it is valid.
@@ -42,7 +42,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   return {
     provide: {
       authApi: authOfetch({ apiFetch: apiAuth }),
-      apiSamarkand: samarkandApi({ apiFetch: apiSamarkand }),
+      apinewsletter: emailApi({ apiFetch: apinewsletterr }),
     },
   };
 });
