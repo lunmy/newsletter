@@ -71,6 +71,9 @@ export default {
           200: '#fcecf4',
           300: '#dbe6eb',
         },
+        'dialog': {
+          0: '#F5F5F5'
+        }
       },
       borderColor: (theme) => ({
         ...theme('colors'),
@@ -84,6 +87,9 @@ export default {
       zIndex: {
         '1': '1',
       },
+      spacing: {
+        '160': '40rem',
+      }
     },
   },
   plugins: [],

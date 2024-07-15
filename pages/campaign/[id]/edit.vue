@@ -29,7 +29,7 @@ async function updateCampaign(data) {
     console.log(data.images)
     await $apinewsletter.updateCampaign(data);
     successToast("Campagne modifiée");
-    navigateTo('/campaigns')
+    navigateTo('/campaign')
   } catch (error) {
     console.log("error:", error);
   }

@@ -89,7 +89,7 @@ async function submit() {
           setUser(login.value);
           setToken(data.token);
 
-          navigateTo(`/campaigns`);
+          navigateTo(`/campaign`);
         })
         .catch((error) => {
           const status = error.response.status;

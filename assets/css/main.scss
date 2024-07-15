@@ -3,3 +3,14 @@
 @tailwind utilities;
 @import "variables";
 
+html{
+  overflow-y:auto!important;
+ }
+
+.default-actions {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  padding: 15px;
+}

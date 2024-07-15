@@ -22,7 +22,7 @@ async function createCampaign(campaign){
   try {
     await $apinewsletter.createCampaign(campaign);
     successToast("Campagne ajoutée");
-    navigateTo('/campaigns')
+    navigateTo('/campaign')
   } catch (error) {
     console.log("error:", error);
   }

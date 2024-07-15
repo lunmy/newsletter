@@ -9,20 +9,27 @@ export default defineNuxtConfig({
         },
     },
     devtools: { enabled: true },
+    css: [
+        '@/assets/css/main.scss',
+    ],
     modules: [
         "@nuxtjs/tailwindcss",
         "vuetify-nuxt-module",
         "@pinia/nuxt",
         "@pinia-plugin-persistedstate/nuxt",
-        "@nuxt/image"
+        "@nuxt/image",
+        "nuxt-tiptap-editor"
     ],
     app: {
         head: {
-            title: "Samarkand",
+            title: "Newsletters",
             link: [
                 { rel: "icon", type: "image/x-icon", href: "/public/favicon.ico" },
             ],
         },
+    },
+    tiptap: {
+        prefix: "Tiptap", //prefix for Tiptap imports, composables not included
     },
     postcss: {
         plugins: {

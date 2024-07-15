@@ -16,7 +16,9 @@
           variant="solo-filled"
           rounded="lg"
           v-model="props.campaign.name"
-          :rules="[textRule]"></v-text-field>
+          :rules="[textRule]">
+
+        </v-text-field>
 
         <!-- description -->
         <v-text-field
@@ -40,7 +42,7 @@
         </div>
         <!-- submit -->
         <v-btn
-          class="mt-2 bg-primary"
+          class="mt-2 bg-primary-0"
           type="button"
           block
           @click="submit"
@@ -54,8 +56,6 @@
 </template>
 
 <script setup>
-// update need → id comp to add campaign
-// create need → campaign data to update it
 import { textRule } from "@/composables/rules";
 
 const props = defineProps({
