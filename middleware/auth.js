@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-import { useCookie } from "nuxt/app";
+import {useCookie} from "nuxt/app";
 
 /**
  * Middleware function to handle route authentication and token expiration.
@@ -12,22 +12,21 @@ import { useCookie } from "nuxt/app";
  * @returns {void} - Redirects if token is expired or invalid, otherwise continues.
  */
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const token = await useCookie("token");
-  // todo uncoment to prevent server side error when fetching data without token
-  // fixme if uncoment send to home when refresh
-  // if (import.meta.client) {
-  if (token.value !== undefined) {
-    const decoded = jwtDecode(token.value);
-    // convert expiration date in milisecond
-    const expirationDate = new Date(decoded.exp * 1000);
-    if (expirationDate > new Date()) {
-      return;
+    const token = await useCookie("token");
+    if (import.meta.client) {
+        console.log('aaaaa', token.value)
+        if (token.value !== undefined) {
+            const decoded = jwtDecode(token.value);
+            // convert expiration date in milisecond
+            const expirationDate = new Date(decoded.exp * 1000);
+            if (expirationDate > new Date()) {
+                return;
+            }
+        }
+        if (to.path != "/") {
+            return navigateTo("/");
+        }
     }
-  }
-  // }
-  // avoid infinite loop
-  if (to.path != "/") {
-    return navigateTo("/");
-  }
-  return;
+    // avoid infinite loop
+    return;
 });

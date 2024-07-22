@@ -8,8 +8,9 @@
       <div class="animate-pulse bg-gray-300 h-10 w-full rounded-lg"></div>
     </div>
 
-    <div v-else class="w-2/5 mx-auto space-y-4">
+    <div v-else class="space-y-4">
       <v-form ref="form">
+        <div class="grid grid-cols-2 gap-4">
         <!-- name -->
         <v-text-field
           label="nom de la campagne"
@@ -19,8 +20,6 @@
           :rules="[textRule]">
 
         </v-text-field>
-
-        <!-- description -->
         <v-text-field
           label="description"
           variant="solo-filled"
@@ -36,20 +35,30 @@
             label="image"
             variant="solo-filled"
             rounded="lg"></v-file-input>
-
         <div v-if="image !== null">
           <NuxtImg class="w-60 mx-auto" :src="image" alt="" />
         </div>
-        <!-- submit -->
-        <v-btn
-          class="mt-2 bg-primary-0"
-          type="button"
-          block
-          @click="submit"
-          rounded="lg"
-          :loading="props.loading">
-          <span class="text-0 font-semibold text-base"> Valider </span>
-        </v-btn>
+        </div>
+        <div class="default-actions px-8 items-center">
+          <div>
+            <v-btn
+                class="white--text mr-6"
+                :loading="loading"
+                @click="navigateTo('/campaign')"
+                color="validation-error"
+            >
+              Annuler
+            </v-btn>
+            <v-btn
+                class="primary white--text"
+                :loading="props.loading"
+                color="primary-0"
+                @click="submit"
+            >
+              Valider
+            </v-btn>
+          </div>
+        </div>
       </v-form>
     </div>
   </v-container>

@@ -178,7 +178,6 @@
         </PerfectScrollbar>
       </div>
       <div class="default-actions px-8 items-center">
-        <div/>
         <div>
           <v-btn
               class="white--text mr-6"

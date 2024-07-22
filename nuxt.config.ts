@@ -1,7 +1,7 @@
 import vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
 import {fr} from 'vuetify/locale'
-import colors from 'vuetify/lib/util/colors'
 export default defineNuxtConfig({
+    $development: undefined, $env: undefined, $meta: undefined, $production: undefined, $test: undefined,
     runtimeConfig: {
         public: {
             NUXT_ENV_API: process.env.NUXT_ENV_API,

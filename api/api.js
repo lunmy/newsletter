@@ -1,5 +1,8 @@
 export default ({apiFetch}) => ({
 
+    async getAllCompanies(criteria) {
+        return await this.getAll('companies', criteria);
+    },
     async getOneCompany(id) {
         return await this.getOne('companies', id);
     },
@@ -48,6 +51,77 @@ export default ({apiFetch}) => ({
             body: data,
             method: "POST",
         });
+    },
+    /*****************************************************
+     *  user
+     ****************************************************/
+    async getAllUsers(criteria) {
+        if(criteria.email == null)
+            delete criteria.email
+        return await this.getAll('users', criteria);
+    },
+    async getOneUser(id) {
+        return await this.getOne('users', id);
+    },
+    async createUser(user) {
+        return await this.create("users", user)
+    },
+    async updateUser(data) {
+        return await this.update(data)
+    },
+    async deleteUser(id) {
+        return await this.delete(id)
+    },
+    /*****************************************************
+     *  token (reset password)
+     ****************************************************/
+    async getRegistrationToken(token) {
+        const xhr = await apiFetch.raw(`/register/${token}`, {
+            method: "GET",
+        });
+        if (xhr.status === 200) {
+            return await xhr._data;
+        }
+        return null;
+    },
+    async register(token, data){
+        const xhr = await apiFetch.raw(`/register/${token}`, {
+            method: "POST",
+            body: data,
+        });
+        if (xhr.status === 201) {
+            return await xhr._data;
+        }
+        return null;
+
+    },
+    async resetPassword(data) {
+        const xhr = await apiFetch.raw(`/forgot-password/`, {
+            method: "POST",
+            body: data,
+        });
+        if (xhr.status === 204) {
+            return true;
+        }
+        return null;
+    },
+    async getToken(tokenId){
+        return await this.getOne('forgot-password', tokenId)
+    },
+    async updateUserPassword(tokenId, password) {
+        const result = await apiFetch.raw(`/forgot-password/${tokenId}`, {
+            method: "POST",
+            body: {
+                password
+            },
+            header: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (result.status === 204) {
+            return true;
+        }
+        return null;
     },
     /*****************************************************
      *  template

@@ -18,3 +18,11 @@ export function newsletterStatus() {
     ]
 }
 
+export function userRoles() {
+    return [
+        {key: 'ADMIN', label: 'Administrateur'},
+        {key: 'USER', label: 'Editeur'},
+        {key: 'SUPER_ADMIN', label: 'Super administrateur'},
+    ]
+}
+

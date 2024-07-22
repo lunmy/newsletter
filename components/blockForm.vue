@@ -7,7 +7,7 @@
     </div>
     <div v-else class="space-y-4">
       <v-form ref="form">
-        <div class="grid grid-cols-12 gap-6">
+        <div class="grid grid-cols-12 gap-6 mb-12">
           <div class="col-span-8">
             <v-text-field
                 label="Nom du bloc"
@@ -72,15 +72,26 @@
             </v-expansion-panels>
           </div>
         </div>
-        <v-btn
-            class="mt-2 bg-primary-0"
-            type="button"
-            block
-            @click="submit"
-            rounded="lg"
-            :loading="props.loading">
-          <span class="text-0 font-semibold text-base"> Valider </span>
-        </v-btn>
+        <div class="default-actions px-8 items-center">
+          <div>
+            <v-btn
+                class="white--text mr-6"
+                :loading="loading"
+                @click="navigateTo('/block')"
+                color="validation-error"
+            >
+              Annuler
+            </v-btn>
+            <v-btn
+                class="primary white--text"
+                :loading="props.loading"
+                color="primary-0"
+                @click="submit"
+            >
+              Valider
+            </v-btn>
+          </div>
+        </div>
       </v-form>
     </div>
   </v-container>

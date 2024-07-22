@@ -1,6 +1,7 @@
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "~/store/auth";
 import jwtDecode from "jwt-decode";
+import {useCookie} from "nuxt/app";
 
 const hierarchy = {
   ROLE_SUPER_ADMIN: ['ROLE_ADMIN', 'ROLE_USER', 'IS_AUTHENTICATED_FULLY'],
@@ -63,3 +64,10 @@ export function extractTextBetweenPercents(input) {
   return Array.from(matches);
 }
 
+export async function getUserInfos() {
+  const token = await useCookie("token");
+  if (token.value !== undefined) {
+    return jwtDecode(token.value);
+  }
+  return null
+}

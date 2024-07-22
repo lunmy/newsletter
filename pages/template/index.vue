@@ -95,10 +95,8 @@ const { $apinewsletter } = useNuxtApp();
 const timer = ref(null);
 const totalItems = ref(0);
 const templates = ref([]);
-const expanded = ref([]);
 const itemToDelete = ref({});
 const shopDeletePopup = ref(false);
-const addNewsletterPopup = ref(false);
 const loading = ref(false);
 
 const criteria = ref({
